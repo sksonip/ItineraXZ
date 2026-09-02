@@ -275,11 +275,11 @@ export default function NewItineraryPage() {
       {/* HEADER */}
 
       <header className="border-b border-[#242424] bg-[#0D0D0D]">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-5">
           <button
             type="button"
             onClick={() => router.push("/itineraries")}
-            className="flex items-center gap-2 text-sm font-bold text-zinc-400 transition hover:text-white"
+            className="flex items-center gap-2 text-xs font-bold text-zinc-400 transition hover:text-white sm:text-sm"
           >
             <ArrowLeft size={17} />
             Back to itineraries
@@ -295,7 +295,7 @@ export default function NewItineraryPage() {
             </p>
           </div>
 
-          <div className="w-[130px]" />
+          <div className="hidden w-[130px] sm:block" />
         </div>
       </header>
 

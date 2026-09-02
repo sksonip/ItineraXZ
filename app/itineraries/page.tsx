@@ -91,7 +91,7 @@ export default function ItinerariesPage() {
   return (
     <main className="min-h-screen bg-[#090909] text-white">
       <header className="border-b border-[#242424] bg-[#0D0D0D]">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-5">
           <div className="flex items-center gap-4">
             <button
               type="button"
@@ -119,7 +119,7 @@ export default function ItinerariesPage() {
           <button
             type="button"
             onClick={() => router.push("/itineraries/new")}
-            className="flex items-center gap-2 rounded-lg bg-[#E8820C] px-4 py-3 text-xs font-black uppercase tracking-wider text-black transition hover:bg-[#F29420]"
+              className="flex items-center gap-2 rounded-lg bg-[#E8820C] px-3 py-3 text-[10px] font-black uppercase tracking-wider text-black transition hover:bg-[#F29420] sm:px-4 sm:text-xs"
           >
             <Plus size={16} />
             New itinerary

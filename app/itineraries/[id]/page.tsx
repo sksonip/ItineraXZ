@@ -342,7 +342,11 @@ export default function ItineraryBuilderPage() {
 
       if (!response.ok) {
         throw new Error(
-          data.error || "Failed to save itinerary."
+          data.details
+            ? `${data.error || "Failed to save itinerary."} ${JSON.stringify(
+                data.details.fieldErrors
+              )}`
+            : data.error || "Failed to save itinerary."
         );
       }
 

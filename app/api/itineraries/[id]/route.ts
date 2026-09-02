@@ -21,7 +21,7 @@ const itineraryUpdateSchema = z.object({
   travellers: z.number().int().positive().optional(),
   travelStyle: z.string().optional(),
   description: z.string().optional(),
-  highlights: z.array(z.string()).optional(),
+  highlights: z.array(z.unknown()).optional(),
   philosophy: z.string().optional(),
   phases: z.array(z.unknown()).optional(),
   pricing: z.unknown().optional(),

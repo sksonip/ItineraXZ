@@ -269,13 +269,15 @@ function PageShell({
         max-w-[794px]
         overflow-hidden
         bg-[#101010]
-        px-[52px]
-        py-[54px]
+        px-5
+        py-8
         shadow-2xl
         print:mb-0
         print:min-h-0
         print:max-w-none
         print:shadow-none
+        sm:px-[52px]
+        sm:py-[54px]
         ${className}
       `}
     >
@@ -434,7 +436,7 @@ export default function ItineraryPreviewPage() {
       {/* Toolbar */}
 
       <div className="sticky top-0 z-50 border-b border-[#242424] bg-[#0D0D0D]/95 px-4 py-3 backdrop-blur print:hidden">
-        <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-4">
+        <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-3">
           <button
             onClick={() => router.back()}
             className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-zinc-400 transition hover:text-white"
@@ -451,10 +453,10 @@ export default function ItineraryPreviewPage() {
             <p className="text-sm font-bold">{tripName}</p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-2">
             <button
               onClick={() => router.push(`/itineraries/${id}`)}
-              className="inline-flex items-center gap-2 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-bold uppercase tracking-wider text-zinc-300 transition hover:border-zinc-500 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-lg border border-[#2A2A2A] px-2.5 py-2 text-[10px] font-bold uppercase tracking-wider text-zinc-300 transition hover:border-zinc-500 hover:text-white sm:px-3 sm:text-xs"
             >
               <Edit3 size={14} />
               Edit
@@ -463,7 +465,7 @@ export default function ItineraryPreviewPage() {
             <button
               onClick={downloadPdf}
               disabled={downloading}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#E8820C] px-4 py-2 text-xs font-black uppercase tracking-wider text-black transition hover:bg-[#f29420] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#E8820C] px-2.5 py-2 text-[10px] font-black uppercase tracking-wider text-black transition hover:bg-[#f29420] disabled:cursor-not-allowed disabled:opacity-60 sm:px-4 sm:text-xs"
             >
               {downloading ? (
                 <Loader2 size={14} className="animate-spin" />

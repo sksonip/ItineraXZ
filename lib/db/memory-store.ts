@@ -8,7 +8,7 @@ export type StoredItinerary = {
   travellers?: number;
   travelStyle?: string;
   description?: string;
-  highlights?: string[];
+  highlights?: unknown[];
   philosophy?: string;
   phases?: unknown[];
   pricing?: unknown;
