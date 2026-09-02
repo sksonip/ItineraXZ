@@ -13,6 +13,7 @@ import {
   IndianRupee,
   Mountain,
 } from "lucide-react";
+import { easternBhutanPreset } from "@/lib/itinerary/presets";
 
 type FormData = {
   tripName: string;
@@ -53,6 +54,7 @@ export default function NewItineraryPage() {
   const router = useRouter();
 
   const [form, setForm] = useState<FormData>(initialForm);
+  const [selectedPreset, setSelectedPreset] = useState("");
   const [creating, setCreating] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [error, setError] = useState("");
@@ -64,6 +66,32 @@ export default function NewItineraryPage() {
     setForm((current) => ({
       ...current,
       [field]: value,
+    }));
+  }
+
+  function selectPreset(value: string) {
+    setSelectedPreset(value);
+
+    if (value !== "eastern-bhutan") {
+      return;
+    }
+
+    const total = easternBhutanPreset.pricing.items.reduce(
+      (sum, item) => sum + item.quantity * item.unitPrice,
+      0
+    );
+
+    setForm((current) => ({
+      ...current,
+      tripName: easternBhutanPreset.tripName || easternBhutanPreset.title,
+      destination: easternBhutanPreset.destination,
+      durationDays: easternBhutanPreset.duration,
+      startPoint: easternBhutanPreset.startPoint || "",
+      endPoint: easternBhutanPreset.endPoint || "",
+      travellers: easternBhutanPreset.travelers,
+      budget: total,
+      style: easternBhutanPreset.travelStyle,
+      description: easternBhutanPreset.overview,
     }));
   }
 
@@ -167,17 +195,42 @@ export default function NewItineraryPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          tripName: form.tripName.trim(),
-          destination: form.destination.trim(),
-          durationDays: form.durationDays,
-          startPoint: form.startPoint.trim(),
-          endPoint: form.endPoint.trim(),
-          travellers: form.travellers,
-          budget: form.budget,
-          style: form.style,
-          description: form.description.trim(),
-        }),
+        body: JSON.stringify(
+          selectedPreset === "eastern-bhutan"
+            ? {
+                ...easternBhutanPreset,
+                id: undefined,
+                title: form.tripName.trim(),
+                tripName: form.tripName.trim(),
+                destination: form.destination.trim(),
+                duration: String(form.durationDays),
+                durationDays: form.durationDays,
+                startPoint: form.startPoint.trim(),
+                endPoint: form.endPoint.trim(),
+                travellers: form.travellers,
+                travelers: form.travellers,
+                budget: form.budget,
+                style: form.style,
+                travelStyle: form.style,
+                description: form.description.trim(),
+                overview: form.description.trim(),
+              }
+            : {
+                title: form.tripName.trim(),
+                tripName: form.tripName.trim(),
+                destination: form.destination.trim(),
+                duration: String(form.durationDays),
+                durationDays: form.durationDays,
+                startPoint: form.startPoint.trim(),
+                endPoint: form.endPoint.trim(),
+                travellers: form.travellers,
+                budget: form.budget,
+                style: form.style,
+                travelStyle: form.style,
+                description: form.description.trim(),
+                overview: form.description.trim(),
+              }
+        ),
       });
 
       const data = await response.json();
@@ -282,6 +335,22 @@ export default function NewItineraryPage() {
               </div>
 
               <div className="space-y-5">
+                <label className="block">
+                  <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
+                    Start from a template
+                  </span>
+                  <select
+                    value={selectedPreset}
+                    onChange={(event) => selectPreset(event.target.value)}
+                    className="w-full rounded-lg border border-[#2A2A2A] bg-[#181818] px-4 py-3 text-sm text-white outline-none focus:border-[#E8820C]"
+                  >
+                    <option value="">Blank itinerary</option>
+                    <option value="eastern-bhutan">
+                      Eastern Bhutan Road Expedition 2026
+                    </option>
+                  </select>
+                </label>
+
                 <Input
                   label="Trip name"
                   placeholder="Coorg Monsoon Expedition"

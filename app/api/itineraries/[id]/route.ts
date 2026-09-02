@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import {
+  itineraries,
+  type StoredItinerary,
+} from "@/lib/db/memory-store";
 
 /*
  * Temporary in-memory storage.
@@ -7,43 +11,6 @@ import { z } from "zod";
  * Replace these functions with your database layer
  * when Supabase/Prisma is connected.
  */
-
-type Itinerary = {
-  id: string;
-  title: string;
-  destination: string;
-  duration?: string;
-  startDate?: string;
-  endDate?: string;
-  travellers?: number;
-  travelStyle?: string;
-  description?: string;
-  highlights?: string[];
-  philosophy?: string;
-  phases?: unknown[];
-  pricing?: unknown;
-  tripName?: string;
-  tagline?: string;
-  maxAltitude?: string;
-  tempRange?: string;
-  startPoint?: string;
-  endPoint?: string;
-  totalDistanceKm?: number;
-  highlightCards?: unknown[];
-  stayPreference?: unknown;
-  foodPreference?: unknown;
-  travelCadence?: string[];
-  quote?: unknown;
-  philosophyIntro?: string;
-  pillars?: unknown[];
-  advantageCards?: unknown[];
-  accommodationComfort?: unknown;
-  safetyTeam?: unknown;
-  createdAt: string;
-  updatedAt: string;
-};
-
-const itineraries = new Map<string, Itinerary>();
 
 const itineraryUpdateSchema = z.object({
   title: z.string().min(1).optional(),
@@ -75,7 +42,7 @@ const itineraryUpdateSchema = z.object({
   advantageCards: z.array(z.unknown()).optional(),
   accommodationComfort: z.unknown().optional(),
   safetyTeam: z.unknown().optional(),
-});
+}).passthrough();
 
 type RouteContext = {
   params: Promise<{
@@ -158,7 +125,7 @@ export async function PUT(
       );
     }
 
-    const updatedItinerary: Itinerary = {
+    const updatedItinerary: StoredItinerary = {
       ...existing,
       ...validation.data,
       id,

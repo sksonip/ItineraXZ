@@ -1,42 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-
-type Itinerary = {
-  id: string;
-  title: string;
-  destination: string;
-  duration?: string;
-  startDate?: string;
-  endDate?: string;
-  travellers?: number;
-  travelStyle?: string;
-  description?: string;
-  highlights?: string[];
-  philosophy?: string;
-  phases?: unknown[];
-  pricing?: unknown;
-  tripName?: string;
-  tagline?: string;
-  maxAltitude?: string;
-  tempRange?: string;
-  startPoint?: string;
-  endPoint?: string;
-  totalDistanceKm?: number;
-  highlightCards?: unknown[];
-  stayPreference?: unknown;
-  foodPreference?: unknown;
-  travelCadence?: string[];
-  quote?: unknown;
-  philosophyIntro?: string;
-  pillars?: unknown[];
-  advantageCards?: unknown[];
-  accommodationComfort?: unknown;
-  safetyTeam?: unknown;
-  createdAt: string;
-  updatedAt: string;
-};
-
-const itineraries = new Map<string, Itinerary>();
+import {
+  itineraries,
+  type StoredItinerary,
+} from "@/lib/db/memory-store";
 
 const createItinerarySchema = z.object({
   title: z.string().min(1, "Title is required."),
@@ -68,7 +35,7 @@ const createItinerarySchema = z.object({
   advantageCards: z.array(z.unknown()).optional(),
   accommodationComfort: z.unknown().optional(),
   safetyTeam: z.unknown().optional(),
-});
+}).passthrough();
 
 /**
  * GET /api/itineraries
@@ -120,7 +87,7 @@ export async function POST(request: NextRequest) {
 
     const id = crypto.randomUUID();
 
-    const itinerary: Itinerary = {
+    const itinerary: StoredItinerary = {
       id,
       ...validation.data,
       createdAt: now,

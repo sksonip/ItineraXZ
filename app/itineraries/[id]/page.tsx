@@ -134,6 +134,105 @@ const emptyItinerary = (id: string): Itinerary => ({
   exclusions: [],
 });
 
+function toBuilderItinerary(
+  source: Record<string, any>,
+  id: string
+): Itinerary {
+  const sourceDays = Array.isArray(source.days)
+    ? source.days
+    : [];
+
+  const sourcePhases = Array.isArray(source.phases)
+    ? source.phases
+    : [];
+
+  const days = sourceDays.map((day: any, index: number) => ({
+    dayLabel: day.dayLabel || `Day ${day.day || index + 1}`,
+    title: day.title || "",
+    description: day.description || "",
+    distance: day.distance || "",
+    altitude: day.altitude || "",
+    overnight: day.overnight || day.location || "",
+  }));
+
+  const phases = sourcePhases.map((phase: any) => ({
+    phaseTitle: phase.phaseTitle || phase.title || "",
+    dayRangeLabel: phase.dayRangeLabel || "",
+    days: Array.isArray(phase.days)
+      ? phase.days
+          .map((dayReference: any) =>
+            typeof dayReference === "number"
+              ? sourceDays[dayReference - 1]
+              : dayReference
+          )
+          .filter(Boolean)
+          .map((day: any, index: number) => ({
+            dayLabel: day.dayLabel || `Day ${index + 1}`,
+            title: day.title || "",
+            description: day.description || "",
+            distance: day.distance || "",
+            altitude: day.altitude || "",
+            overnight: day.overnight || day.location || "",
+          }))
+      : [],
+  }));
+
+  const highlights = Array.isArray(source.highlightCards)
+    ? source.highlightCards
+    : Array.isArray(source.highlights)
+      ? source.highlights.map((highlight: any) =>
+          typeof highlight === "string"
+            ? { title: highlight, text: "" }
+            : highlight
+        )
+      : [];
+
+  const pricingItems = source.pricing?.lineItems ||
+    source.pricing?.items || [];
+
+  return {
+    ...emptyItinerary(id),
+    ...source,
+    id,
+    tripName: source.tripName || source.title || "",
+    tagline: source.tagline || "",
+    durationDays: Number(source.durationDays || source.duration || days.length || 1),
+    maxAltitude: source.maxAltitude || "",
+    tempRange: source.tempRange || "",
+    startPoint: source.startPoint || "",
+    endPoint: source.endPoint || "",
+    totalDistanceKm: Number(source.totalDistanceKm || 0),
+    description: source.description || source.overview || "",
+    highlights,
+    philosophyIntro: source.philosophyIntro || source.philosophy || "",
+    pillars: source.pillars || [],
+    phases: phases.length ? phases : [{
+      phaseTitle: "Itinerary",
+      dayRangeLabel: "",
+      days,
+    }],
+    pricing: {
+      currency: source.pricing?.currency || "INR",
+      lineItems: pricingItems.map((item: any) => ({
+        label: item.label || item.name || "",
+        amount: Number(item.amount ?? item.unitPrice ?? 0),
+      })),
+      totalPerPerson: Number(
+        source.pricing?.totalPerPerson ||
+          pricingItems.reduce(
+            (total: number, item: any) =>
+              total + Number(item.amount ?? item.unitPrice ?? 0),
+            0
+          )
+      ),
+      paymentSchedule: source.pricing?.paymentSchedule || [],
+      disclaimer: source.pricing?.disclaimer || "",
+    },
+    inclusions: source.inclusions || [],
+    exclusions: source.exclusions || [],
+  };
+}
+
 export default function ItineraryBuilderPage() {
   const params = useParams();
   const router = useRouter();
@@ -166,17 +265,19 @@ export default function ItineraryBuilderPage() {
   useEffect(() => {
     if (!id) return;
 
+    const itineraryId = id;
+
     async function load() {
       try {
         const response = await fetch(
-          `/api/itineraries/${id}`,
+          `/api/itineraries/${itineraryId}`,
           {
             cache: "no-store",
           }
         );
 
         if (response.status === 404) {
-          setItinerary(emptyItinerary(id));
+          setItinerary(emptyItinerary(itineraryId));
           return;
         }
 
@@ -188,11 +289,16 @@ export default function ItineraryBuilderPage() {
           );
         }
 
-        setItinerary(data.itinerary);
+        setItinerary(
+          toBuilderItinerary(
+            data.itinerary || {},
+            itineraryId
+          )
+        );
       } catch (error) {
         console.error(error);
 
-        setItinerary(emptyItinerary(id));
+        setItinerary(emptyItinerary(itineraryId));
       } finally {
         setLoading(false);
       }
