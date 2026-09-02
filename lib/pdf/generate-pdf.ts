@@ -1,5 +1,38 @@
 import { getElementById, prepareForPdf } from "@/lib/pdf/browser";
 
+function cloneWithResolvedStyles(
+  element: HTMLElement
+): HTMLElement {
+  const clone = element.cloneNode(true) as HTMLElement;
+  const sourceElements = [element, ...Array.from(element.querySelectorAll("*"))];
+  const cloneElements = [clone, ...Array.from(clone.querySelectorAll("*"))];
+
+  sourceElements.forEach((source, index) => {
+    const target = cloneElements[index] as HTMLElement;
+    const computed = window.getComputedStyle(source);
+
+    for (const property of Array.from(computed)) {
+      target.style.setProperty(
+        property,
+        computed.getPropertyValue(property),
+        computed.getPropertyPriority(property)
+      );
+    }
+
+    target.className = "";
+  });
+
+  clone.style.position = "absolute";
+  clone.style.left = "-100000px";
+  clone.style.top = "0";
+  clone.style.width = `${element.getBoundingClientRect().width}px`;
+  clone.style.height = `${element.getBoundingClientRect().height}px`;
+  clone.style.overflow = "hidden";
+  document.body.appendChild(clone);
+
+  return clone;
+}
+
 export type GeneratePdfOptions = {
   elementId?: string;
   filename?: string;
@@ -47,28 +80,7 @@ export async function generatePdf(
     options.scale || 2;
 
   const canvas =
-    await html2canvas(element, {
-      scale,
-      useCORS: true,
-      allowTaint: false,
-      backgroundColor:
-        options.backgroundColor ||
-        "#ffffff",
-      logging: false,
-      imageTimeout: 15000,
-      scrollX: 0,
-      scrollY: 0,
-      windowWidth:
-        element.scrollWidth,
-      windowHeight:
-        element.scrollHeight,
-    });
-
-  const imageData =
-    canvas.toDataURL(
-      "image/jpeg",
-      0.95
-    );
+    element.querySelectorAll<HTMLElement>(".pdf-page");
 
   const pdf =
     new jsPDF({
@@ -84,55 +96,40 @@ export async function generatePdf(
   const pageHeight =
     pdf.internal.pageSize.getHeight();
 
-  const margin = 8;
+  for (const [index, page] of Array.from(canvas).entries()) {
+    const exportPage = cloneWithResolvedStyles(page);
 
-  const contentWidth =
-    pageWidth - margin * 2;
+    try {
+      const canvas = await html2canvas(exportPage, {
+        scale,
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: options.backgroundColor || "#101010",
+        logging: false,
+        imageTimeout: 15000,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: exportPage.scrollWidth,
+        windowHeight: exportPage.scrollHeight,
+      });
 
-  const imageHeight =
-    (canvas.height * contentWidth) /
-    canvas.width;
+      if (index > 0) {
+        pdf.addPage();
+      }
 
-  let remainingHeight =
-    imageHeight;
-
-  let position = margin;
-
-  pdf.addImage(
-    imageData,
-    "JPEG",
-    margin,
-    position,
-    contentWidth,
-    imageHeight,
-    undefined,
-    "FAST"
-  );
-
-  remainingHeight -=
-    pageHeight - margin * 2;
-
-  while (remainingHeight > 0) {
-    position =
-      margin -
-      (imageHeight -
-        remainingHeight);
-
-    pdf.addPage();
-
-    pdf.addImage(
-      imageData,
-      "JPEG",
-      margin,
-      position,
-      contentWidth,
-      imageHeight,
-      undefined,
-      "FAST"
-    );
-
-    remainingHeight -=
-      pageHeight - margin * 2;
+      pdf.addImage(
+        canvas.toDataURL("image/jpeg", 0.95),
+        "JPEG",
+        0,
+        0,
+        pageWidth,
+        pageHeight,
+        undefined,
+        "FAST"
+      );
+    } finally {
+      exportPage.remove();
+    }
   }
 
   pdf.save(filename);

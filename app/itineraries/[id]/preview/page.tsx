@@ -12,6 +12,7 @@ import {
   Thermometer,
   Users,
 } from "lucide-react";
+import generatePdf from "@/lib/pdf/generate-pdf";
 
 type Highlight = {
   title?: string;
@@ -133,6 +134,98 @@ function getTripName(itinerary: Itinerary) {
   return itinerary.tripName || itinerary.title || "Untitled Expedition";
 }
 
+function normalizePreviewItinerary(
+  source: Record<string, any>,
+  id: string
+): Itinerary {
+  const sourceDays = Array.isArray(source.days) ? source.days : [];
+  const sourcePhases = Array.isArray(source.phases) ? source.phases : [];
+
+  const days: Day[] = sourceDays.map((day: any, index: number) => ({
+    dayLabel: day.dayLabel || `Day ${day.day || index + 1}`,
+    title: day.title || "",
+    description: day.description || "",
+    distance: day.distance || "",
+    altitude: day.altitude || "",
+    overnight: day.overnight || day.location || "",
+  }));
+
+  const phases: Phase[] = sourcePhases.map((phase: any) => ({
+    phaseTitle: phase.phaseTitle || phase.title || "",
+    dayRangeLabel: phase.dayRangeLabel || "",
+    days: Array.isArray(phase.days)
+      ? phase.days
+          .map((reference: any) =>
+            typeof reference === "number"
+              ? sourceDays[reference - 1]
+              : reference
+          )
+          .filter(Boolean)
+          .map((day: any, index: number) => ({
+            dayLabel: day.dayLabel || `Day ${index + 1}`,
+            title: day.title || "",
+            description: day.description || "",
+            distance: day.distance || "",
+            altitude: day.altitude || "",
+            overnight: day.overnight || day.location || "",
+          }))
+      : [],
+  }));
+
+  const rawHighlights = source.highlightCards || source.highlights || [];
+  const highlights: Highlight[] = Array.isArray(rawHighlights)
+    ? rawHighlights.map((highlight: any) =>
+        typeof highlight === "string"
+          ? { title: highlight, text: "" }
+          : highlight
+      )
+    : [];
+
+  const rawPricingItems = source.pricing?.lineItems || source.pricing?.items || [];
+
+  return {
+    ...source,
+    id,
+    tripName: source.tripName || source.title || "",
+    title: source.title || source.tripName || "",
+    tagline: source.tagline || "",
+    durationDays: Number(source.durationDays || source.duration || days.length || 1),
+    description: source.description || source.overview || "",
+    highlights,
+    philosophyIntro: source.philosophyIntro || source.philosophy || "",
+    pillars: source.pillars || [],
+    phases,
+    pricing: {
+      currency: source.pricing?.currency || "INR",
+      lineItems: rawPricingItems.map((item: any) => ({
+        label: item.label || item.name || "",
+        amount: Number(item.amount ?? item.unitPrice ?? 0),
+      })),
+      totalPerPerson: Number(
+        source.pricing?.totalPerPerson ||
+          rawPricingItems.reduce(
+            (total: number, item: any) =>
+              total + Number(item.amount ?? item.unitPrice ?? 0),
+            0
+          )
+      ),
+      paymentSchedule: source.pricing?.paymentSchedule || [],
+      disclaimer: source.pricing?.disclaimer || "",
+    },
+    inclusions: source.inclusions || [],
+    exclusions: source.exclusions || [],
+    advantages: Array.isArray(source.advantageCards)
+      ? source.advantageCards
+      : Array.isArray(source.advantages)
+        ? source.advantages.map((advantage: any) =>
+            typeof advantage === "string"
+              ? { title: advantage, bullets: [] }
+              : advantage
+          )
+        : [],
+  };
+}
+
 function SectionTitle({
   number,
   children,
@@ -167,6 +260,7 @@ function PageShell({
   return (
     <section
       className={`
+        pdf-page
         relative
         mx-auto
         mb-8
@@ -215,6 +309,8 @@ export default function ItineraryPreviewPage() {
   useEffect(() => {
     if (!id) return;
 
+    const itineraryId = id;
+
     async function loadItinerary() {
       try {
         setLoading(true);
@@ -230,7 +326,12 @@ export default function ItineraryPreviewPage() {
           throw new Error(data.error || "Failed to load itinerary.");
         }
 
-        setItinerary(data.itinerary);
+        setItinerary(
+          normalizePreviewItinerary(
+            data.itinerary || {},
+            itineraryId
+          )
+        );
       } catch (err) {
         console.error(err);
 
@@ -271,45 +372,17 @@ export default function ItineraryPreviewPage() {
 
     try {
       setDownloading(true);
-
-      const response = await fetch("/api/pdf", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          itinerary,
-        }),
+      await generatePdf({
+        elementId: "pdf-content",
+        filename: `${
+          getTripName(itinerary)
+            .replace(/[^a-z0-9]+/gi, "-")
+            .replace(/^-|-$/g, "")
+            .toLowerCase() || "itinerary"
+        }.pdf`,
+        scale: 2,
+        backgroundColor: "#101010",
       });
-
-      if (!response.ok) {
-        const data = await response.json().catch(() => null);
-
-        throw new Error(data?.error || "Failed to generate PDF.");
-      }
-
-      const blob = await response.blob();
-
-      const url = window.URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-
-      link.href = url;
-
-      link.download = `${
-        getTripName(itinerary)
-          .replace(/[^a-z0-9]+/gi, "-")
-          .replace(/^-|-$/g, "")
-          .toLowerCase() || "itinerary"
-      }.pdf`;
-
-      document.body.appendChild(link);
-
-      link.click();
-
-      link.remove();
-
-      window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error(err);
 
@@ -406,7 +479,10 @@ export default function ItineraryPreviewPage() {
 
       {/* Document */}
 
-      <div className="mx-auto max-w-[900px] px-3 py-8 md:px-8 md:py-12 print:p-0">
+      <div
+        id="pdf-content"
+        className="mx-auto max-w-[900px] px-3 py-8 md:px-8 md:py-12 print:p-0"
+      >
         {/* COVER */}
 
         <PageShell className="flex min-h-[1123px] flex-col justify-end">
@@ -704,7 +780,7 @@ export default function ItineraryPreviewPage() {
                           </span>
 
                           <span className="text-sm font-bold text-[#E8820C]">
-                            {money(payment.amount, itinerary.pricing.currency)}
+                            {money(payment.amount, itinerary.pricing?.currency)}
                           </span>
                         </div>
 
