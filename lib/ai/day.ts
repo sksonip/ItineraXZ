@@ -1,9 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-/* ========================================== */
-/* TYPES                                      */
-/* ========================================== */
-
 export type DaySuggestionInput = {
   destination?: string;
   dayNumber?: number;

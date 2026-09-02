@@ -1,10 +1,6 @@
 import { generateJson } from "@/lib/ai/gemini";
 import { buildItineraryContext } from "@/lib/ai/prompt";
 
-/* ========================================== */
-/* TYPES                                      */
-/* ========================================== */
-
 export type SuggestionType =
   | "activity"
   | "restaurant"

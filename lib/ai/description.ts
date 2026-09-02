@@ -1,8 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-/* ========================================== */
-/* TYPES                                      */
-/* ========================================== */
 
 export type DescriptionInput = {
   destination?: string;

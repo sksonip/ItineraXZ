@@ -1,5 +1,27 @@
 import db from "@/lib/db/client";
 
+type DuplicateDay = {
+  id: string;
+  itineraryId: string;
+  day: number;
+  title: string;
+  location: string;
+  description: string;
+  meals: unknown;
+  accommodation: unknown;
+  notes: unknown;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type DuplicatePhase = {
+  id: string;
+  itineraryId: string;
+  title: string;
+  description: string;
+  days: unknown;
+};
+
 export async function duplicateItinerary(
   id: string,
   slug: string
@@ -31,21 +53,14 @@ export async function duplicateItinerary(
       ...itineraryData,
       slug,
       days: {
-        create: days.map(
-          ({
-            id: _dayId,
-            itineraryId: _itineraryId,
-            ...day
-          }) => day
+        create: (days as DuplicateDay[]).map(
+          ({ id, itineraryId, createdAt, updatedAt, ...day }) =>
+            day
         ),
       },
       phases: {
-        create: phases.map(
-          ({
-            id: _phaseId,
-            itineraryId: _itineraryId,
-            ...phase
-          }) => phase
+        create: (phases as DuplicatePhase[]).map(
+          ({ id, itineraryId, ...phase }) => phase
         ),
       },
     },
