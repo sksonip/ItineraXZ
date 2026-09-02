@@ -20,9 +20,13 @@ export type DayAccommodation = {
 export type ItineraryDay = {
   id: string;
   day: number;
+  dayLabel?: string;
   title: string;
   location: string;
   description: string;
+  distance?: string;
+  altitude?: string;
+  overnight?: string;
   activities: DayActivity[];
   meals: DayMeals;
   accommodation: DayAccommodation;

@@ -22,6 +22,23 @@ type Itinerary = {
   philosophy?: string;
   phases?: unknown[];
   pricing?: unknown;
+  tripName?: string;
+  tagline?: string;
+  maxAltitude?: string;
+  tempRange?: string;
+  startPoint?: string;
+  endPoint?: string;
+  totalDistanceKm?: number;
+  highlightCards?: unknown[];
+  stayPreference?: unknown;
+  foodPreference?: unknown;
+  travelCadence?: string[];
+  quote?: unknown;
+  philosophyIntro?: string;
+  pillars?: unknown[];
+  advantageCards?: unknown[];
+  accommodationComfort?: unknown;
+  safetyTeam?: unknown;
   createdAt: string;
   updatedAt: string;
 };
@@ -41,6 +58,23 @@ const itineraryUpdateSchema = z.object({
   philosophy: z.string().optional(),
   phases: z.array(z.unknown()).optional(),
   pricing: z.unknown().optional(),
+  tripName: z.string().optional(),
+  tagline: z.string().optional(),
+  maxAltitude: z.string().optional(),
+  tempRange: z.string().optional(),
+  startPoint: z.string().optional(),
+  endPoint: z.string().optional(),
+  totalDistanceKm: z.number().finite().min(0).optional(),
+  highlightCards: z.array(z.unknown()).optional(),
+  stayPreference: z.unknown().optional(),
+  foodPreference: z.unknown().optional(),
+  travelCadence: z.array(z.string()).optional(),
+  quote: z.unknown().optional(),
+  philosophyIntro: z.string().optional(),
+  pillars: z.array(z.unknown()).optional(),
+  advantageCards: z.array(z.unknown()).optional(),
+  accommodationComfort: z.unknown().optional(),
+  safetyTeam: z.unknown().optional(),
 });
 
 type RouteContext = {

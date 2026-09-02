@@ -43,6 +43,26 @@ const accommodationSchema = z.object({
     .max(1000),
 });
 
+const textBlockSchema = z.object({
+  title: z.string().trim().max(200),
+  text: z.string().trim().max(2000),
+});
+
+const quoteSchema = z.object({
+  text: z.string().trim().max(2000),
+  attribution: z.string().trim().max(200),
+});
+
+const advantageSchema = z.object({
+  title: z.string().trim().max(200),
+  bullets: z.array(z.string().trim().max(500)).default([]),
+});
+
+const comfortSectionSchema = z.object({
+  bullets: z.array(z.string().trim().max(500)).default([]),
+  closingStatement: z.string().trim().max(2000),
+});
+
 const daySchema = z.object({
   id: z.string().optional(),
 
@@ -50,6 +70,8 @@ const daySchema = z.object({
     .number()
     .int()
     .min(1),
+
+  dayLabel: z.string().trim().max(100).optional(),
 
   title: z
     .string()
@@ -66,6 +88,10 @@ const daySchema = z.object({
     .string()
     .trim()
     .max(2000),
+
+  distance: z.string().trim().max(200).optional(),
+  altitude: z.string().trim().max(100).optional(),
+  overnight: z.string().trim().max(200).optional(),
 
   activities: z
     .array(activitySchema)
@@ -89,6 +115,8 @@ const daySchema = z.object({
 
 const phaseSchema = z.object({
   id: z.string().optional(),
+
+  dayRangeLabel: z.string().trim().max(100).optional(),
 
   title: z
     .string()
@@ -174,6 +202,18 @@ const pricingSchema = z.object({
   adjustments: z
     .array(pricingAdjustmentSchema)
     .default([]),
+
+  paymentSchedule: z
+    .array(
+      z.object({
+        label: z.string().trim().max(200),
+        note: z.string().trim().max(500),
+        amount: z.number().finite().min(0),
+      })
+    )
+    .default([]),
+
+  disclaimer: z.string().trim().max(2000).optional(),
 });
 
 export const itinerarySchema = z.object({
@@ -191,6 +231,9 @@ export const itinerarySchema = z.object({
     .trim()
     .min(1, "Title is required")
     .max(200, "Title is too long"),
+
+  tripName: z.string().trim().max(200).optional(),
+  tagline: z.string().trim().max(500).optional(),
 
   destination: z
     .string()
@@ -228,11 +271,23 @@ export const itinerarySchema = z.object({
     .optional()
     .or(z.literal("")),
 
+  maxAltitude: z.string().trim().max(100).optional(),
+  tempRange: z.string().trim().max(100).optional(),
+  startPoint: z.string().trim().max(200).optional(),
+  endPoint: z.string().trim().max(200).optional(),
+  totalDistanceKm: z.number().finite().min(0).optional(),
+
   highlights: z
     .array(
       z.string().trim().max(500)
     )
     .default([]),
+
+  highlightCards: z.array(textBlockSchema).default([]),
+  stayPreference: textBlockSchema.optional(),
+  foodPreference: textBlockSchema.optional(),
+  travelCadence: z.array(z.string().trim().max(500)).default([]),
+  quote: quoteSchema.optional(),
 
   inclusions: z
     .array(
@@ -257,6 +312,9 @@ export const itinerarySchema = z.object({
     .trim()
     .max(3000),
 
+  philosophyIntro: z.string().trim().max(5000).optional(),
+  pillars: z.array(textBlockSchema).default([]),
+
   safety: z
     .string()
     .trim()
@@ -267,6 +325,10 @@ export const itinerarySchema = z.object({
       z.string().trim().max(500)
     )
     .default([]),
+
+  advantageCards: z.array(advantageSchema).default([]),
+  accommodationComfort: comfortSectionSchema.optional(),
+  safetyTeam: comfortSectionSchema.optional(),
 
   phases: z
     .array(phaseSchema)

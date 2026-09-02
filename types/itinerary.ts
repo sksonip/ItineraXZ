@@ -12,6 +12,7 @@ export type ItineraryActivity = {
 
 export type ItineraryPhase = {
   id: string;
+  dayRangeLabel?: string;
   title: string;
   description: string;
   days: number[];
@@ -37,25 +38,70 @@ export type ItineraryPricing = {
   currency: string;
   items: PricingItem[];
   adjustments: PricingAdjustment[];
+  paymentSchedule?: PaymentScheduleItem[];
+  disclaimer?: string;
+};
+
+export type PaymentScheduleItem = {
+  label: string;
+  note: string;
+  amount: number;
+};
+
+export type ItineraryTextBlock = {
+  title: string;
+  text: string;
+};
+
+export type ItineraryQuote = {
+  text: string;
+  attribution: string;
+};
+
+export type ItineraryAdvantage = {
+  title: string;
+  bullets: string[];
+};
+
+export type ItineraryComfortSection = {
+  bullets: string[];
+  closingStatement: string;
 };
 
 export type Itinerary = {
   id?: string;
   slug?: string;
   title: string;
+  tripName?: string;
+  tagline?: string;
   destination: string;
   overview: string;
   duration: number;
   travelers: number;
   travelStyle: string;
   heroImage?: string;
+  maxAltitude?: string;
+  tempRange?: string;
+  startPoint?: string;
+  endPoint?: string;
+  totalDistanceKm?: number;
   highlights: string[];
+  highlightCards?: ItineraryTextBlock[];
+  stayPreference?: ItineraryTextBlock;
+  foodPreference?: ItineraryTextBlock;
+  travelCadence?: string[];
+  quote?: ItineraryQuote;
   inclusions: string[];
   exclusions: string[];
   advantages: string[];
   philosophy: string;
+  philosophyIntro?: string;
+  pillars?: ItineraryTextBlock[];
   safety: string;
   accommodations: string[];
+  advantageCards?: ItineraryAdvantage[];
+  accommodationComfort?: ItineraryComfortSection;
+  safetyTeam?: ItineraryComfortSection;
   phases: ItineraryPhase[];
   days: ItineraryDay[];
   pricing: ItineraryPricing;

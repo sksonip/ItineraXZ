@@ -17,13 +17,32 @@ model Itinerary {
   travelers      Int      @default(1)
   travelStyle    String   @default("Balanced")
   heroImage      String?
+  tripName       String?
+  tagline        String?
+  maxAltitude    String?
+  tempRange      String?
+  startPoint     String?
+  endPoint       String?
+  totalDistanceKm Float?
   highlights     Json     @default("[]")
+  highlightCards Json     @default("[]")
+  stayPreference Json?
+  foodPreference Json?
+  travelCadence  Json     @default("[]")
+  quote          Json?
   inclusions     Json     @default("[]")
   exclusions     Json     @default("[]")
   advantages     Json     @default("[]")
   philosophy     String   @default("")
+  philosophyIntro String?
+  pillars        Json     @default("[]")
   safety         String   @default("")
   accommodations Json     @default("[]")
+  advantageCards Json     @default("[]")
+  accommodationComfort Json?
+  safetyTeam     Json?
+  paymentSchedule Json    @default("[]")
+  pricingDisclaimer String?
 
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -47,6 +66,10 @@ model ItineraryDay {
   meals           Json     @default("{}")
   accommodation   Json     @default("{}")
   notes           Json     @default("[]")
+  dayLabel        String?
+  distance        String?
+  altitude        String?
+  overnight       String?
 
   itinerary       Itinerary @relation(
     fields: [itineraryId],
@@ -84,6 +107,7 @@ model ItineraryPhase {
   id          String   @id @default(cuid())
   itineraryId String
   title       String
+  dayRangeLabel String?
   description String   @default("")
   days        Json     @default("[]")
 

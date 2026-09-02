@@ -1,7 +1,11 @@
 import type {
   Itinerary,
+  ItineraryAdvantage,
   ItineraryPhase,
   ItineraryPricing,
+  ItineraryComfortSection,
+  ItineraryQuote,
+  ItineraryTextBlock,
 } from "@/types/itinerary";
 import type { ItineraryDay } from "@/types/day";
 
@@ -30,6 +34,44 @@ function stringArray(
   );
 }
 
+function normalizeTextBlock(
+  value: any
+): ItineraryTextBlock {
+  return {
+    title: stringValue(value?.title),
+    text: stringValue(value?.text),
+  };
+}
+
+function normalizeQuote(
+  value: any
+): ItineraryQuote {
+  return {
+    text: stringValue(value?.text),
+    attribution: stringValue(value?.attribution),
+  };
+}
+
+function normalizeAdvantage(
+  value: any
+): ItineraryAdvantage {
+  return {
+    title: stringValue(value?.title),
+    bullets: stringArray(value?.bullets),
+  };
+}
+
+function normalizeComfortSection(
+  value: any
+): ItineraryComfortSection {
+  return {
+    bullets: stringArray(value?.bullets),
+    closingStatement: stringValue(
+      value?.closingStatement
+    ),
+  };
+}
+
 function normalizeDay(
   value: any,
   index: number
@@ -48,11 +90,17 @@ function normalizeDay(
       stringValue(value?.title) ||
       `Day ${index + 1}`,
 
+    dayLabel: stringValue(value?.dayLabel) || undefined,
+
     location:
       stringValue(value?.location),
 
     description:
       stringValue(value?.description),
+
+    distance: stringValue(value?.distance) || undefined,
+    altitude: stringValue(value?.altitude) || undefined,
+    overnight: stringValue(value?.overnight) || undefined,
 
     activities: Array.isArray(
       value?.activities
@@ -119,6 +167,10 @@ function normalizePhase(
     title:
       stringValue(value?.title) ||
       `Phase ${index + 1}`,
+
+    dayRangeLabel:
+      stringValue(value?.dayRangeLabel) ||
+      undefined,
 
     description:
       stringValue(
@@ -216,6 +268,22 @@ function normalizePricing(
           })
         )
       : [],
+
+    paymentSchedule: Array.isArray(
+      value?.paymentSchedule
+    )
+      ? value.paymentSchedule.map(
+          (item: any) => ({
+            label: stringValue(item?.label),
+            note: stringValue(item?.note),
+            amount: numberValue(item?.amount, 0),
+          })
+        )
+      : [],
+
+    disclaimer:
+      stringValue(value?.disclaimer) ||
+      undefined,
   };
 }
 
@@ -261,6 +329,14 @@ export function normalizeItinerary(
     title:
       stringValue(data.title),
 
+    tripName:
+      stringValue(data.tripName) ||
+      undefined,
+
+    tagline:
+      stringValue(data.tagline) ||
+      undefined,
+
     destination:
       stringValue(
         data.destination
@@ -289,10 +365,64 @@ export function normalizeItinerary(
         data.heroImage
       ) || undefined,
 
+    maxAltitude:
+      stringValue(data.maxAltitude) ||
+      undefined,
+
+    tempRange:
+      stringValue(data.tempRange) ||
+      undefined,
+
+    startPoint:
+      stringValue(data.startPoint) ||
+      undefined,
+
+    endPoint:
+      stringValue(data.endPoint) ||
+      undefined,
+
+    totalDistanceKm:
+      Number.isFinite(
+        Number(data.totalDistanceKm)
+      )
+        ? Number(data.totalDistanceKm)
+        : undefined,
+
     highlights:
       stringArray(
         data.highlights
       ),
+
+    highlightCards: Array.isArray(
+      data.highlightCards
+    )
+      ? data.highlightCards.map(
+          (item: any) =>
+            normalizeTextBlock(item)
+        )
+      : [],
+
+    stayPreference:
+      data.stayPreference
+        ? normalizeTextBlock(
+            data.stayPreference
+          )
+        : undefined,
+
+    foodPreference:
+      data.foodPreference
+        ? normalizeTextBlock(
+            data.foodPreference
+          )
+        : undefined,
+
+    travelCadence: stringArray(
+      data.travelCadence
+    ),
+
+    quote: data.quote
+      ? normalizeQuote(data.quote)
+      : undefined,
 
     inclusions:
       stringArray(
@@ -314,6 +444,17 @@ export function normalizeItinerary(
         data.philosophy
       ),
 
+    philosophyIntro:
+      stringValue(data.philosophyIntro) ||
+      undefined,
+
+    pillars: Array.isArray(data.pillars)
+      ? data.pillars.map(
+          (item: any) =>
+            normalizeTextBlock(item)
+        )
+      : [],
+
     safety:
       stringValue(
         data.safety
@@ -323,6 +464,28 @@ export function normalizeItinerary(
       stringArray(
         data.accommodations
       ),
+
+    advantageCards: Array.isArray(
+      data.advantageCards
+    )
+      ? data.advantageCards.map(
+          (item: any) =>
+            normalizeAdvantage(item)
+        )
+      : [],
+
+    accommodationComfort:
+      data.accommodationComfort
+        ? normalizeComfortSection(
+            data.accommodationComfort
+          )
+        : undefined,
+
+    safetyTeam: data.safetyTeam
+      ? normalizeComfortSection(
+          data.safetyTeam
+        )
+      : undefined,
 
     phases,
 
