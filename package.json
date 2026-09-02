@@ -1,0 +1,44 @@
+{
+  "name": "itineraxz",
+  "version": "1.0.0",
+  "description": "**What this is:** an internal tool for Bettada Jeeva that lets Vignesh (non-technical) fill in a trip's **Overview, Description, Day-wise Plan, and Price Breakdown** through a simple form, and get back a polished, on-brand itinerary document — automatically laid out to match the studio-designed reference template, with no manual PowerPoint/Canva work per trip.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nithyacoorg2005/ItineraXZ.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nithyacoorg2005/ItineraXZ/issues"
+  },
+  "homepage": "https://github.com/Nithyacoorg2005/ItineraXZ#readme",
+  "dependencies": {
+    "@google/genai": "^2.20.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "lucide-react": "^1.39.0",
+    "next": "^16.3.4",
+    "pdfkit": "^0.20.2",
+    "react": "^19.2.8",
+    "react-router-dom": "^7.18.3",
+    "router": "^2.2.0",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "@types/pdfkit": "^0.17.6",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.4",
+    "typescript": "^6.0.3"
+  }
+}
