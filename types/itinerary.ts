@@ -1,6 +1,6 @@
 import type {
   ItineraryDay,
-} from "@/lib/types/day";
+} from "@/types/day";
 
 export type ItineraryActivity = {
   id: string;

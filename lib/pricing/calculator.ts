@@ -1,7 +1,7 @@
 import type {
   PricingAdjustment,
   PricingItem,
-} from "@/lib/ai/types";
+} from "@/types/pricing";
 
 import {
   applyAdjustments,

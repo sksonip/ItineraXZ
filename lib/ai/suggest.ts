@@ -1,5 +1,5 @@
 import { generateJson } from "@/lib/ai/gemini";
-import { buildItineraryContext } from "@/lib/ai/prompt";
+import { buildItineraryContext } from "../../lib/ai/prompts"
 
 export type SuggestionType =
   | "activity"

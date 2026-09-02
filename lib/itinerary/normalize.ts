@@ -1,9 +1,9 @@
 import type {
   Itinerary,
-  ItineraryDay,
   ItineraryPhase,
   ItineraryPricing,
-} from "@/lib/itinerary/default";
+} from "@/types/itinerary";
+import type { ItineraryDay } from "@/types/day";
 
 function stringValue(value: unknown): string {
   return typeof value === "string" ? value : "";
