@@ -113,12 +113,13 @@ export default function NewItineraryPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          type: "description",
+          text: form.description,
+          instruction: "Improve this trip description while preserving all supplied facts.",
+          tripTitle: form.tripName,
           destination: form.destination,
-          durationDays: form.durationDays,
-          travellers: form.travellers,
-          budget: form.budget,
-          style: form.style,
-          description: form.description,
+          duration: form.durationDays,
+          travelStyle: form.style,
         }),
       });
 
@@ -144,8 +145,11 @@ export default function NewItineraryPage() {
           ? data.suggestion
           : typeof data.description === "string"
             ? data.description
-            : typeof data.suggestions?.description === "string"
-              ? data.suggestions.description
+            : Array.isArray(data.suggestions)
+              ? data.suggestions.find(
+                  (item: { type?: string; text?: string }) =>
+                    item.type === "description" && item.text
+                )?.text || data.suggestions[0]?.text || ""
               : "";
 
       if (suggestion) {

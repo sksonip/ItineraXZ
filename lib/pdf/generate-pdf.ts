@@ -12,6 +12,10 @@ function cloneWithResolvedStyles(
     const computed = window.getComputedStyle(source);
 
     for (const property of Array.from(computed)) {
+      if (property.startsWith("--")) {
+        continue;
+      }
+
       target.style.setProperty(
         property,
         computed.getPropertyValue(property),

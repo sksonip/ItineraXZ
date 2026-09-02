@@ -497,6 +497,12 @@ export default function ItineraryPreviewPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/65 to-black/20" />
 
           <div className="relative z-10 max-w-[650px] pb-20">
+            <img
+              src="/brand/bettada-jeeva-logo.svg"
+              alt="Bettada Jeeva"
+              className="mb-8 h-24 w-24 object-contain"
+            />
+
             <div className="mb-5 text-[11px] font-black uppercase tracking-[0.45em] text-[#E8820C]">
               BETTADA JEEVA
             </div>
