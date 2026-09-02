@@ -1,4 +1,5 @@
 import db from "@/lib/db/client";
+import type { Prisma } from "@prisma/client";
 
 /* ========================================== */
 /* ITINERARIES                                */
@@ -102,7 +103,7 @@ export async function duplicateItinerary(
       slug,
       createdAt: undefined,
       updatedAt: undefined,
-    },
+    } as Prisma.ItineraryUncheckedCreateInput,
   });
 }
 

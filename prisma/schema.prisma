@@ -71,11 +71,7 @@ model ItineraryDay {
   altitude        String?
   overnight       String?
 
-  itinerary       Itinerary @relation(
-    fields: [itineraryId],
-    references: [id],
-    onDelete: Cascade
-  )
+  itinerary       Itinerary @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
 
   activities      DayActivity[]
 
@@ -94,11 +90,7 @@ model DayActivity {
   description String   @default("")
   duration    String   @default("")
 
-  day         ItineraryDay @relation(
-    fields: [dayId],
-    references: [id],
-    onDelete: Cascade
-  )
+  day         ItineraryDay @relation(fields: [dayId], references: [id], onDelete: Cascade)
 
   @@index([dayId])
 }
@@ -111,11 +103,7 @@ model ItineraryPhase {
   description String   @default("")
   days        Json     @default("[]")
 
-  itinerary   Itinerary @relation(
-    fields: [itineraryId],
-    references: [id],
-    onDelete: Cascade
-  )
+  itinerary   Itinerary @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
 
   @@index([itineraryId])
 }
@@ -128,11 +116,7 @@ model PricingItem {
   quantity    Float    @default(0)
   unitPrice   Float    @default(0)
 
-  itinerary   Itinerary @relation(
-    fields: [itineraryId],
-    references: [id],
-    onDelete: Cascade
-  )
+  itinerary   Itinerary @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
 
   @@index([itineraryId])
 }
@@ -145,11 +129,7 @@ model PricingAdjustment {
   value       Float
   operation   AdjustmentOperation
 
-  itinerary   Itinerary @relation(
-    fields: [itineraryId],
-    references: [id],
-    onDelete: Cascade
-  )
+  itinerary   Itinerary @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
 
   @@index([itineraryId])
 }

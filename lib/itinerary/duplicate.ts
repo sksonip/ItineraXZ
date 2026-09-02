@@ -1,4 +1,5 @@
 import db from "@/lib/db/client";
+import type { Prisma } from "@prisma/client";
 
 type DuplicateDay = {
   id: string;
@@ -7,9 +8,9 @@ type DuplicateDay = {
   title: string;
   location: string;
   description: string;
-  meals: unknown;
-  accommodation: unknown;
-  notes: unknown;
+  meals: Prisma.JsonValue;
+  accommodation: Prisma.JsonValue;
+  notes: Prisma.JsonValue;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -19,7 +20,7 @@ type DuplicatePhase = {
   itineraryId: string;
   title: string;
   description: string;
-  days: unknown;
+  days: Prisma.JsonValue;
 };
 
 export async function duplicateItinerary(
@@ -55,15 +56,24 @@ export async function duplicateItinerary(
       days: {
         create: (days as DuplicateDay[]).map(
           ({ id, itineraryId, createdAt, updatedAt, ...day }) =>
-            day
+            ({
+              ...day,
+              meals: day.meals ?? {},
+              accommodation: day.accommodation ?? {},
+              notes: day.notes ?? [],
+            } as Prisma.ItineraryDayCreateWithoutItineraryInput)
         ),
       },
       phases: {
         create: (phases as DuplicatePhase[]).map(
-          ({ id, itineraryId, ...phase }) => phase
+          ({ id, itineraryId, ...phase }) =>
+            ({
+              ...phase,
+              days: phase.days ?? [],
+            } as Prisma.ItineraryPhaseCreateWithoutItineraryInput)
         ),
       },
-    },
+    } as Prisma.ItineraryCreateInput,
     include: {
       days: true,
       phases: true,

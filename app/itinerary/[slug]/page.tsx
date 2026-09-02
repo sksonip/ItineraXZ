@@ -80,13 +80,15 @@ export default function ItineraryPage() {
   useEffect(() => {
     if (!slug) return;
 
+    const itinerarySlug = slug;
+
     async function loadItinerary() {
       try {
         setLoading(true);
         setError("");
 
         const response = await fetch(
-          `/api/itineraries/${encodeURIComponent(slug)}`,
+          `/api/itineraries/${encodeURIComponent(itinerarySlug)}`,
           {
             method: "GET",
             cache: "no-store",

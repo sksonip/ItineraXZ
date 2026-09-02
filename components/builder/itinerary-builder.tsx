@@ -13,7 +13,7 @@ import {
 import BuilderHeader from "@/components/builder/builder-header";
 import BuilderSidebar, {
   type BuilderSection,
-} from "@/components/builder/builder-sider";
+} from "@/components/builder/builder-sidebar";
 
 import TripDetails, {
   type TripDetailsData,
