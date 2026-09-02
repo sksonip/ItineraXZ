@@ -17,15 +17,15 @@ import BuilderSidebar, {
 
 import TripDetails, {
   type TripDetailsData,
-} from "@/components/builder/sections/trip-details";
+} from "@/components/itinerary/sections/trip-details";
 
 import Pricing, {
   type PricingData,
-} from "@/components/builder/sections/pricing";
+} from "@/components/itinerary/sections/pricing";
 
 import Safety, {
   type SafetyItem,
-} from "@/components/builder/sections/safety";
+} from "@/components/itinerary/sections/safety";
 
 /* ================================================== */
 /* TYPES                                              */
