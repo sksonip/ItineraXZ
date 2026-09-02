@@ -301,13 +301,13 @@ export default function NewItineraryPage() {
 
       {/* CONTENT */}
 
-      <div className="mx-auto max-w-5xl px-5 py-10 md:py-14">
-        <div className="mb-10 max-w-2xl">
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-5 sm:py-10 md:py-14">
+        <div className="mb-8 max-w-2xl sm:mb-10">
           <p className="mb-3 text-[10px] font-black uppercase tracking-[0.3em] text-[#E8820C]">
             Start building
           </p>
 
-          <h1 className="text-3xl font-black tracking-tight md:text-5xl">
+          <h1 className="text-3xl font-black leading-tight tracking-tight sm:text-4xl md:text-5xl">
             Create an itinerary.
           </h1>
 
@@ -320,14 +320,14 @@ export default function NewItineraryPage() {
 
         <form
           onSubmit={createItinerary}
-          className="grid gap-6 lg:grid-cols-[1fr_300px]"
+          className="grid min-w-0 gap-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_300px]"
         >
           {/* MAIN FORM */}
 
           <div className="space-y-5">
             {/* TRIP BASICS */}
 
-            <section className="rounded-xl border border-[#242424] bg-[#111111] p-5 md:p-7">
+            <section className="min-w-0 rounded-xl border border-[#242424] bg-[#111111] p-4 sm:p-5 md:p-7">
               <div className="mb-6">
                 <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#E8820C]">
                   01
@@ -376,7 +376,7 @@ export default function NewItineraryPage() {
                   icon={<MapPin size={15} />}
                 />
 
-                <div className="grid gap-5 md:grid-cols-2">
+                <div className="grid gap-4 sm:gap-5 md:grid-cols-2">
                   <NumberInput
                     label="Duration"
                     suffix="days"
@@ -400,7 +400,7 @@ export default function NewItineraryPage() {
                   />
                 </div>
 
-                <div className="grid gap-5 md:grid-cols-2">
+                <div className="grid gap-4 sm:gap-5 md:grid-cols-2">
                   <Input
                     label="Starting point"
                     placeholder="Bengaluru"
@@ -424,7 +424,7 @@ export default function NewItineraryPage() {
 
             {/* TRAVEL STYLE */}
 
-            <section className="rounded-xl border border-[#242424] bg-[#111111] p-5 md:p-7">
+            <section className="min-w-0 rounded-xl border border-[#242424] bg-[#111111] p-4 sm:p-5 md:p-7">
               <div className="mb-6">
                 <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#E8820C]">
                   02
@@ -439,7 +439,7 @@ export default function NewItineraryPage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              <div className="grid grid-cols-1 gap-2 min-[380px]:grid-cols-2 sm:grid-cols-4">
                 {travelStyles.map((style) => {
                   const selected =
                     form.style === style;
@@ -466,7 +466,7 @@ export default function NewItineraryPage() {
 
             {/* BUDGET */}
 
-            <section className="rounded-xl border border-[#242424] bg-[#111111] p-5 md:p-7">
+            <section className="min-w-0 rounded-xl border border-[#242424] bg-[#111111] p-4 sm:p-5 md:p-7">
               <div className="mb-6">
                 <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#E8820C]">
                   03
@@ -496,7 +496,7 @@ export default function NewItineraryPage() {
 
             {/* DESCRIPTION */}
 
-            <section className="rounded-xl border border-[#242424] bg-[#111111] p-5 md:p-7">
+            <section className="min-w-0 rounded-xl border border-[#242424] bg-[#111111] p-4 sm:p-5 md:p-7">
               <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#E8820C]">
@@ -517,7 +517,7 @@ export default function NewItineraryPage() {
                   type="button"
                   onClick={getAISuggestion}
                   disabled={aiLoading}
-                  className="flex shrink-0 items-center justify-center gap-2 rounded-lg border border-[#E8820C]/40 bg-[#E8820C]/10 px-3 py-2.5 text-xs font-black text-[#E8820C] transition hover:bg-[#E8820C]/20 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#E8820C]/40 bg-[#E8820C]/10 px-3 py-2.5 text-xs font-black text-[#E8820C] transition hover:bg-[#E8820C]/20 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:shrink-0"
                 >
                   {aiLoading ? (
                     <Loader2
@@ -543,7 +543,7 @@ export default function NewItineraryPage() {
                   )
                 }
                 placeholder="Example: I want a slow 5-day trip through Coorg with forests, local food, waterfalls, short hikes and comfortable stays. Avoid tourist traps..."
-                rows={8}
+                rows={7}
                 className="w-full resize-y rounded-lg border border-[#2A2A2A] bg-[#181818] px-4 py-3 text-sm leading-6 text-white outline-none placeholder:text-zinc-700 focus:border-[#E8820C]"
               />
 
@@ -565,7 +565,7 @@ export default function NewItineraryPage() {
             <button
               type="submit"
               disabled={creating}
-              className="flex w-full items-center justify-center gap-3 rounded-xl bg-[#E8820C] px-5 py-4 text-sm font-black uppercase tracking-[0.15em] text-black transition hover:bg-[#F29420] disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#E8820C] px-4 py-4 text-xs font-black uppercase tracking-[0.1em] text-black transition hover:bg-[#F29420] disabled:cursor-not-allowed disabled:opacity-60 sm:gap-3 sm:px-5 sm:text-sm sm:tracking-[0.15em]"
             >
               {creating ? (
                 <>
@@ -587,7 +587,7 @@ export default function NewItineraryPage() {
           {/* SIDEBAR */}
 
           <aside className="space-y-5">
-            <div className="rounded-xl border border-[#242424] bg-[#111111] p-5 lg:sticky lg:top-6">
+            <div className="rounded-xl border border-[#242424] bg-[#111111] p-4 sm:p-5 lg:sticky lg:top-6">
               <div className="mb-5 flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#E8820C] text-black">
                   <Sparkles size={17} />

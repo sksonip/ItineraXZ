@@ -1,393 +1,98 @@
 "use client";
 
+import { useState } from "react";
 import {
-  CalendarDays,
-  ChevronDown,
-  ChevronUp,
-  CircleDollarSign,
-  FileText,
-  Hotel,
-  Info,
-  ListChecks,
-  Map,
+  ArrowUpRight,
+  Compass,
   MapPin,
-  ShieldCheck,
+  Menu,
+  MoveUpRight,
+  Settings,
   Sparkles,
-  Utensils,
   X,
 } from "lucide-react";
 
-export type BuilderSection =
-  | "trip-details"
-  | "overview"
-  | "days"
-  | "inclusions"
-  | "exclusions"
-  | "accommodations"
-  | "advantages"
-  | "philosophy"
-  | "pricing"
-  | "safety";
-
-type BuilderSidebarProps = {
-  activeSection?: BuilderSection;
-  onSectionChange?: (
-    section: BuilderSection
-  ) => void;
-
-  completedSections?: BuilderSection[];
-
-  open?: boolean;
-  onClose?: () => void;
-
-  aiEnabled?: boolean;
-};
-
-type SectionItem = {
-  id: BuilderSection;
-  label: string;
-  description: string;
-  icon: React.ElementType;
-};
-
-const sections: SectionItem[] = [
-  {
-    id: "trip-details",
-    label: "Trip Details",
-    description: "Destination, dates & travelers",
-    icon: MapPin,
-  },
-  {
-    id: "overview",
-    label: "Overview",
-    description: "Introduction to the journey",
-    icon: FileText,
-  },
-  {
-    id: "days",
-    label: "Itinerary",
-    description: "Build the day-by-day plan",
-    icon: CalendarDays,
-  },
-  {
-    id: "inclusions",
-    label: "Inclusions",
-    description: "What's included",
-    icon: ListChecks,
-  },
-  {
-    id: "exclusions",
-    label: "Exclusions",
-    description: "What's not included",
-    icon: X,
-  },
-  {
-    id: "accommodations",
-    label: "Accommodations",
-    description: "Hotels & stays",
-    icon: Hotel,
-  },
-  {
-    id: "advantages",
-    label: "Advantages",
-    description: "Why travelers should choose it",
-    icon: Sparkles,
-  },
-  {
-    id: "philosophy",
-    label: "Travel Philosophy",
-    description: "Style & experience",
-    icon: Map,
-  },
-  {
-    id: "pricing",
-    label: "Pricing",
-    description: "Cost & adjustments",
-    icon: CircleDollarSign,
-  },
-  {
-    id: "safety",
-    label: "Safety",
-    description: "Travel precautions",
-    icon: ShieldCheck,
-  },
+const journeys = [
+  { name: "Karnataka", meta: "Forest · Coffee · Rain", number: "01" },
+  { name: "Ladakh", meta: "Silence · Altitude · Light", number: "02" },
+  { name: "Konkan", meta: "Coast · Mango · Monsoon", number: "03" },
 ];
 
-export default function BuilderSidebar({
-  activeSection = "trip-details",
-  onSectionChange,
-  completedSections = [],
-  open = true,
-  onClose,
-  aiEnabled = true,
-}: BuilderSidebarProps) {
-  const completedCount =
-    completedSections.length;
+const steps = [
+  ["01", "Start with a feeling", "Tell us what you want more of: space, wonder, stillness, or a little bit of all three."],
+  ["02", "Shape the pace", "We build the in-between moments too, so the journey feels like yours from the first mile."],
+  ["03", "Leave room for more", "A thoughtfully planned escape, with enough space to follow the road when it surprises you."],
+];
 
-  const progress = Math.round(
-    (completedCount / sections.length) * 100
-  );
+export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <aside
-      className={`
-        fixed inset-y-0 left-0 z-50
-        flex w-[280px] flex-col
-        border-r border-[#292929]
-        bg-[#0D0D0D]
-        transition-transform duration-200
-        lg:sticky lg:top-0 lg:h-screen lg:translate-x-0
-        ${
-          open
-            ? "translate-x-0"
-            : "-translate-x-full"
-        }
-      `}
-    >
-      {/* HEADER */}
+    <main className="site-shell">
+      <header className="site-header">
+        <a className="brand" href="#top" aria-label="Bettadjeeva home">
+          <span className="brand-mark"><Compass size={23} strokeWidth={1.5} /></span>
+          <span>
+            <strong>Bettadjeeva</strong>
+            <small>Travel, thoughtfully</small>
+          </span>
+        </a>
 
-      <div className="flex h-[68px] shrink-0 items-center justify-between border-b border-[#292929] px-5">
-        <div>
-          <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[#E8820C]">
-            Builder
-          </p>
+        <nav className={`desktop-nav ${menuOpen ? "mobile-nav-open" : ""}`}>
+          <a href="#journeys" onClick={() => setMenuOpen(false)}>Journeys</a>
+          <a href="#approach" onClick={() => setMenuOpen(false)}>Our approach</a>
+          <a href="#escapes" onClick={() => setMenuOpen(false)}>Escapes</a>
+          <a className="mobile-cta" href="#journeys" onClick={() => setMenuOpen(false)}>Plan a journey <ArrowUpRight size={15} /></a>
+        </nav>
 
-          <h2 className="mt-1 text-sm font-black tracking-tight text-white">
-            Itinerary
-          </h2>
-        </div>
-
-        {/* MOBILE CLOSE */}
-
-        {onClose && (
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-zinc-600 transition hover:bg-[#1A1A1A] hover:text-white lg:hidden"
-            aria-label="Close sidebar"
-          >
-            <X size={16} />
+        <div className="header-actions">
+          <button className="icon-button" aria-label="Open settings"><Settings size={17} strokeWidth={1.7} /></button>
+          <a className="header-cta" href="#journeys">Plan a journey <ArrowUpRight size={15} /></a>
+          <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"}>
+            {menuOpen ? <X size={21} /> : <Menu size={21} />}
           </button>
-        )}
-      </div>
-
-      {/* PROGRESS */}
-
-      <div className="shrink-0 border-b border-[#292929] px-5 py-4">
-        <div className="flex items-center justify-between">
-          <span className="text-[9px] font-black uppercase tracking-[0.16em] text-zinc-700">
-            Progress
-          </span>
-
-          <span className="text-[9px] font-black text-zinc-500">
-            {progress}%
-          </span>
         </div>
+      </header>
 
-        <div className="mt-2 h-1 overflow-hidden rounded-full bg-[#222222]">
-          <div
-            className="h-full rounded-full bg-[#E8820C] transition-all duration-300"
-            style={{
-              width: `${progress}%`,
-            }}
-          />
-        </div>
-
-        <p className="mt-2 text-[8px] text-zinc-700">
-          {completedCount} of{" "}
-          {sections.length} sections completed
-        </p>
-      </div>
-
-      {/* NAVIGATION */}
-
-      <nav className="min-h-0 flex-1 overflow-y-auto px-3 py-4">
-        <div className="space-y-1">
-          {sections.map((section, index) => {
-            const active =
-              activeSection === section.id;
-
-            const completed =
-              completedSections.includes(
-                section.id
-              );
-
-            return (
-              <SidebarItem
-                key={section.id}
-                section={section}
-                index={index}
-                active={active}
-                completed={completed}
-                onClick={() => {
-                  onSectionChange?.(
-                    section.id
-                  );
-
-                  onClose?.();
-                }}
-              />
-            );
-          })}
-        </div>
-      </nav>
-
-      {/* AI PANEL */}
-
-      {aiEnabled && (
-        <div className="shrink-0 border-t border-[#292929] p-3">
-          <div className="rounded-xl border border-[#E8820C]/15 bg-[#E8820C]/5 p-4">
-            <div className="flex items-start gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#E8820C]/20 bg-[#E8820C]/10">
-                <Sparkles
-                  size={14}
-                  className="text-[#E8820C]"
-                />
-              </div>
-
-              <div className="min-w-0">
-                <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#E8820C]">
-                  Gemini Assistant
-                </p>
-
-                <p className="mt-1 text-[9px] leading-4 text-zinc-600">
-                  Get suggestions while you build
-                  your itinerary.
-                </p>
-              </div>
-            </div>
+      <section className="hero" id="top">
+        <div className="hero-copy">
+          <div className="eyebrow"><span />A Bettadjeeva original</div>
+          <h1>Go where the day<br />feels <em>longer.</em></h1>
+          <p className="hero-description">Beautifully paced journeys for people who want to notice more: the warm cup, the unmarked road, the view that was worth taking the long way for.</p>
+          <div className="hero-actions">
+            <a className="primary-button" href="#journeys">Begin your journey <span><ArrowUpRight size={16} /></span></a>
+            <a className="text-link" href="#journeys">See your journeys</a>
           </div>
         </div>
-      )}
 
-      {/* FOOTER */}
-
-      <div className="shrink-0 border-t border-[#292929] px-5 py-3">
-        <div className="flex items-center gap-2">
-          <Info
-            size={11}
-            className="text-zinc-700"
-          />
-
-          <p className="text-[8px] leading-4 text-zinc-700">
-            Changes are saved through the builder.
-          </p>
+        <div className="hero-card" id="escapes">
+          <div className="card-grid" />
+          <div className="card-topline"><span>The next chapter</span><span className="card-compass"><Compass size={17} /></span></div>
+          <div className="card-content">
+            <span className="card-label">Suggested escape</span>
+            <h2>The hills are<br />calling softly.</h2>
+          </div>
+          <div className="card-bottomline"><div><MapPin size={15} /> Coorg, Karnataka</div><span>Long weekend · Monsoon air</span></div>
+          <div className="card-orbit orbit-one" /><div className="card-orbit orbit-two" />
+          <button className="card-arrow" aria-label="View suggested escape"><MoveUpRight size={17} /></button>
         </div>
-      </div>
-    </aside>
-  );
-}
+      </section>
 
-/* ================================================== */
-/* SIDEBAR ITEM                                       */
-/* ================================================== */
+      <section className="quote-strip">
+        <span>Not a holiday.</span><strong>A change in tempo.</strong><span>Made for the quietly curious.</span>
+      </section>
 
-function SidebarItem({
-  section,
-  index,
-  active,
-  completed,
-  onClick,
-}: {
-  section: SectionItem;
-  index: number;
-  active: boolean;
-  completed: boolean;
-  onClick: () => void;
-}) {
-  const Icon = section.icon;
+      <section className="journeys-section" id="journeys">
+        <div className="section-heading"><div><div className="eyebrow"><span />Choose your direction</div><h2>Somewhere<br /><em>worth going.</em></h2></div><p>Journeys shaped around a place, a season, and the kind of pause you have been meaning to take.</p></div>
+        <div className="journey-list">{journeys.map((journey) => <a className="journey-row" href="#approach" key={journey.number}><span className="journey-number">{journey.number}</span><span className="journey-name">{journey.name}</span><span className="journey-meta">{journey.meta}</span><ArrowUpRight size={18} /></a>)}</div>
+      </section>
 
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`
-        group relative flex w-full
-        items-center gap-3
-        rounded-lg px-3 py-2.5
-        text-left transition
-        ${
-          active
-            ? "border border-[#E8820C]/20 bg-[#E8820C]/5"
-            : "border border-transparent hover:bg-[#151515]"
-        }
-      `}
-    >
-      {/* ACTIVE INDICATOR */}
+      <section className="approach-section" id="approach">
+        <div className="approach-intro"><div className="eyebrow light"><span />Our approach</div><h2>Leave room<br />for <em>the good stuff.</em></h2><p>We plan the things that matter and leave space for everything else. No rushed checklists. No copy-paste itineraries. Just the right amount of structure to let a place find you.</p></div>
+        <div className="steps">{steps.map(([number, title, body]) => <div className="step" key={number}><span>{number}</span><h3>{title}</h3><p>{body}</p></div>)}</div>
+      </section>
 
-      {active && (
-        <span className="absolute left-0 top-1/2 h-5 w-[2px] -translate-y-1/2 rounded-r-full bg-[#E8820C]" />
-      )}
-
-      {/* ICON */}
-
-      <div
-        className={`
-          flex h-8 w-8 shrink-0
-          items-center justify-center
-          rounded-lg border
-          ${
-            active
-              ? "border-[#E8820C]/20 bg-[#E8820C]/10"
-              : "border-[#292929] bg-[#151515] group-hover:border-[#3A3A3A]"
-          }
-        `}
-      >
-        <Icon
-          size={14}
-          className={
-            active
-              ? "text-[#E8820C]"
-              : "text-zinc-700 group-hover:text-zinc-400"
-          }
-        />
-      </div>
-
-      {/* TEXT */}
-
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <span
-            className={`
-              truncate text-[10px] font-black
-              ${
-                active
-                  ? "text-white"
-                  : "text-zinc-500 group-hover:text-zinc-300"
-              }
-            `}
-          >
-            {section.label}
-          </span>
-
-          {completed && (
-            <span className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-[#E8820C] text-[7px] font-black text-black">
-              ✓
-            </span>
-          )}
-        </div>
-
-        <p className="mt-0.5 truncate text-[8px] text-zinc-700">
-          {section.description}
-        </p>
-      </div>
-
-      {/* NUMBER */}
-
-      <span
-        className={`
-          hidden text-[8px] font-black
-          tabular-nums
-          ${
-            active
-              ? "text-[#E8820C]/50"
-              : "text-zinc-800"
-          }
-          xl:block
-        `}
-      >
-        {String(index + 1).padStart(2, "0")}
-      </span>
-    </button>
+      <footer className="site-footer"><a className="brand" href="#top"><span className="brand-mark"><Compass size={21} strokeWidth={1.5} /></span><span><strong>Bettadjeeva</strong><small>Travel, thoughtfully</small></span></a><span className="footer-note"><Sparkles size={14} /> Go gently. Go further.</span><span>© 2024 Bettadjeeva</span></footer>
+    </main>
   );
 }

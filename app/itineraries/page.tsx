@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from "react";
 import {
-  ArrowRight,
+  ArrowUpRight,
   Loader2,
   MapPin,
+  Menu,
+  Mountain,
   Plus,
   Trash2,
+  X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -20,12 +23,15 @@ type ItinerarySummary = {
   updatedAt: string;
 };
 
+const navItems = ["Journeys", "Our approach", "Escapes"];
+
 export default function ItinerariesPage() {
   const router = useRouter();
   const [itineraries, setItineraries] = useState<ItinerarySummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     async function loadItineraries() {
@@ -89,102 +95,183 @@ export default function ItinerariesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#090909] text-white">
-      <header className="border-b border-[#242424] bg-[#0D0D0D]">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-5">
+    <main className="min-h-screen bg-[#f4f1ea] text-[#171b18]">
+      <header className="relative z-20 border-b border-[#e4dfd5] bg-[#f4f1ea]/95">
+        <div className="mx-auto flex h-[92px] max-w-[1400px] items-center justify-between px-6 sm:px-10 lg:px-16">
           <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={() => router.push("/")}
               aria-label="Go to Bettada Jeeva home page"
-              className="group shrink-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E8820C]"
+              className="group flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#17201b] text-[#f4f1ea] shadow-sm transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#c46138]"
             >
-              <img
-                src="/brand/bettada-jeeva-logo.svg"
-                alt="Bettada Jeeva home"
-                className="h-12 w-12 object-contain transition-transform group-hover:scale-105"
-              />
+              <Mountain size={25} strokeWidth={1.4} />
             </button>
 
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#E8820C]">
+              <p className="text-[9px] font-medium uppercase tracking-[0.28em] text-[#b96139]">
                 Bettada Jeeva
               </p>
-              <h1 className="mt-1 text-2xl font-black tracking-tight">
+              <h1 className="mt-1.5 text-xl font-bold tracking-[-0.04em] sm:text-2xl">
                 Itineraries
               </h1>
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => router.push("/itineraries/new")}
-              className="flex items-center gap-2 rounded-lg bg-[#E8820C] px-3 py-3 text-[10px] font-black uppercase tracking-wider text-black transition hover:bg-[#F29420] sm:px-4 sm:text-xs"
-          >
-            <Plus size={16} />
-            New itinerary
-          </button>
+          <nav className="hidden items-center gap-10 md:flex" aria-label="Primary navigation">
+            {navItems.map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase().replace(" ", "-")}`}
+                className="text-[12px] font-medium uppercase tracking-[0.16em] text-[#68716c] transition-colors hover:text-[#bd5b33]"
+              >
+                {item}
+              </a>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => router.push("/itineraries/new")}
+              className="group hidden items-center gap-3 rounded-full bg-[#c46138] px-6 py-3.5 text-[12px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-[#a94d2c] sm:flex"
+            >
+              <Plus size={16} strokeWidth={2.2} />
+              New itinerary
+            </button>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#ded9cf] text-[#17201b] sm:hidden"
+            >
+              {menuOpen ? <X size={19} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
+
+        {menuOpen && (
+          <div className="border-t border-[#e4dfd5] bg-[#f4f1ea] px-6 py-5 sm:hidden">
+            <nav className="flex flex-col gap-5">
+              {navItems.map((item) => (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase().replace(" ", "-")}`}
+                  onClick={() => setMenuOpen(false)}
+                  className="text-xs font-bold uppercase tracking-[0.17em] text-[#68716c]"
+                >
+                  {item}
+                </a>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  setMenuOpen(false);
+                  router.push("/itineraries/new");
+                }}
+                className="flex w-fit items-center gap-2 rounded-full bg-[#c46138] px-5 py-3 text-xs font-bold uppercase tracking-[0.12em] text-white"
+              >
+                <Plus size={15} strokeWidth={2.2} />
+                New itinerary
+              </button>
+            </nav>
+          </div>
+        )}
       </header>
 
-      <div className="mx-auto max-w-6xl px-5 py-10">
+      <div className="relative mx-auto max-w-[1400px] px-6 py-16 sm:px-10 sm:py-20 lg:px-16">
+        <div className="pointer-events-none absolute -right-56 top-4 h-[420px] w-[420px] rounded-full border border-[#e8d8c9] opacity-70" />
+        <div className="pointer-events-none absolute -right-12 top-20 h-[300px] w-[300px] rounded-full border border-[#eaded3] opacity-70" />
+
+        <div className="relative z-10 mb-14">
+          <div className="mb-5 flex items-center gap-4 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#be6039]">
+            <span className="h-px w-10 bg-[#be6039]" />
+            Saved journeys
+          </div>
+          <h2 className="text-[clamp(2.6rem,6vw,4.5rem)] font-medium leading-[0.92] tracking-[-0.08em] text-[#171b18]">
+            Your itineraries
+          </h2>
+        </div>
+
         {loading && (
-          <div className="flex items-center gap-3 text-sm text-zinc-500">
-            <Loader2 size={18} className="animate-spin" />
+          <div className="flex items-center gap-3 text-sm text-[#68716c]">
+            <Loader2 size={18} className="animate-spin text-[#c46138]" />
             Loading itineraries...
           </div>
         )}
 
         {error && (
-          <div className="rounded-lg border border-red-900/60 bg-red-950/20 px-4 py-3 text-sm text-red-400">
+          <div className="rounded-2xl border border-[#e2c4b6] bg-[#f7e3d9] px-5 py-4 text-sm text-[#9a3d1f]">
             {error}
           </div>
         )}
 
         {!loading && !error && itineraries.length === 0 && (
-          <div className="rounded-xl border border-dashed border-[#333] bg-[#111] px-6 py-16 text-center">
-            <h2 className="text-xl font-black">No itineraries yet</h2>
-            <p className="mt-2 text-sm text-zinc-500">
+          <div className="relative z-10 rounded-[32px] border border-dashed border-[#cfc8bc] bg-[#ebe7de] px-8 py-20 text-center">
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#17201b] text-[#f4f1ea]">
+              <Mountain size={28} strokeWidth={1.3} />
+            </div>
+            <h3 className="text-2xl font-medium tracking-[-0.04em] text-[#171b18]">
+              No itineraries yet
+            </h3>
+            <p className="mx-auto mt-3 max-w-[400px] text-sm leading-6 text-[#68716c]">
               Start with the Eastern Bhutan template or create a blank trip.
             </p>
             <button
               type="button"
               onClick={() => router.push("/itineraries/new")}
-              className="mt-6 inline-flex items-center gap-2 rounded-lg border border-[#E8820C] px-4 py-3 text-xs font-black uppercase tracking-wider text-[#E8820C]"
+              className="group mt-8 inline-flex items-center gap-5 rounded-full bg-[#17201b] py-2 pl-7 pr-2 text-[12px] font-bold uppercase tracking-[0.15em] text-white transition hover:bg-[#26372d]"
             >
               Create first itinerary
-              <ArrowRight size={15} />
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#c46138] transition group-hover:rotate-45">
+                <ArrowUpRight size={18} />
+              </span>
             </button>
           </div>
         )}
 
         {!loading && itineraries.length > 0 && (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="relative z-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {itineraries.map((itinerary) => (
               <article
                 key={itinerary.id}
-                className="group rounded-xl border border-[#292929] bg-[#111] p-5 transition hover:border-[#E8820C]"
+                className="group relative overflow-hidden rounded-[28px] bg-[#1c332a] p-7 text-[#f1ede3] shadow-[0_18px_60px_rgba(24,34,28,0.14)] transition hover:shadow-[0_24px_80px_rgba(24,34,28,0.22)]"
               >
-                <div className="flex items-start justify-between gap-4">
+                <div
+                  className="absolute inset-0 opacity-[0.18]"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(#829285 1px, transparent 1px), linear-gradient(90deg, #829285 1px, transparent 1px)",
+                    backgroundSize: "34px 34px",
+                  }}
+                />
+                <div className="absolute -bottom-20 -right-20 h-48 w-48 rounded-full border border-[#d89059]/40" />
+                <div className="absolute -bottom-8 -right-8 h-28 w-28 rounded-full border border-[#d89059]/20" />
+
+                <div className="relative flex items-start justify-between gap-4">
                   <button
                     type="button"
                     onClick={() => router.push(`/itineraries/${itinerary.id}`)}
-                    className="min-w-0 text-left text-lg font-black hover:text-[#E8820C]"
+                    className="min-w-0 text-left text-xl font-medium leading-tight tracking-[-0.04em] transition hover:text-[#d89059]"
                   >
-                    {itinerary.tripName || itinerary.title || "Untitled Expedition"}
+                    {itinerary.tripName ||
+                      itinerary.title ||
+                      "Untitled Expedition"}
                   </button>
                   <div className="flex shrink-0 items-center gap-3">
-                    <ArrowRight
-                      size={17}
-                      className="text-[#E8820C] transition-transform group-hover:translate-x-1"
+                    <ArrowUpRight
+                      size={18}
+                      className="text-[#d89059] transition-transform group-hover:rotate-45"
                     />
                     <button
                       type="button"
                       onClick={() => deleteItinerary(itinerary)}
                       disabled={deletingId === itinerary.id}
-                      aria-label={`Delete ${itinerary.tripName || itinerary.title}`}
+                      aria-label={`Delete ${
+                        itinerary.tripName || itinerary.title
+                      }`}
                       title="Delete itinerary"
-                      className="rounded-md p-1.5 text-zinc-600 transition hover:bg-red-950/40 hover:text-red-400 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="rounded-full p-2 text-[#9ca89c] transition hover:bg-[#3a4d42] hover:text-[#e8a06a] disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {deletingId === itinerary.id ? (
                         <Loader2 size={16} className="animate-spin" />
@@ -194,21 +281,28 @@ export default function ItinerariesPage() {
                     </button>
                   </div>
                 </div>
-                <div className="mt-5 flex items-center gap-2 text-xs font-bold text-zinc-500">
-                  <MapPin size={14} className="text-[#E8820C]" />
+
+                <div className="relative mt-8 flex items-center gap-2 text-sm font-medium text-[#c3ccc4]">
+                  <MapPin size={15} className="text-[#d89059]" />
                   {itinerary.destination || "Destination not set"}
                 </div>
-                <p className="mt-3 text-[10px] font-black uppercase tracking-wider text-zinc-700">
-                  {itinerary.durationDays || itinerary.duration || "Flexible duration"}
+
+                <p className="relative mt-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#8a988e]">
+                  {itinerary.durationDays ||
+                    itinerary.duration ||
+                    "Flexible duration"}
                   {itinerary.durationDays ? " days" : ""}
                 </p>
-                <button
-                  type="button"
-                  onClick={() => router.push(`/itineraries/${itinerary.id}`)}
-                  className="mt-5 text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500 hover:text-[#E8820C]"
-                >
-                  Open itinerary
-                </button>
+
+                <div className="relative mt-7 border-t border-[#76877b]/50 pt-5">
+                  <button
+                    type="button"
+                    onClick={() => router.push(`/itineraries/${itinerary.id}`)}
+                    className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#d89059] transition hover:text-[#e8a06a]"
+                  >
+                    Open itinerary →
+                  </button>
+                </div>
               </article>
             ))}
           </div>

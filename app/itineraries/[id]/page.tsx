@@ -246,6 +246,7 @@ export default function ItineraryBuilderPage() {
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
   const [aiLoading, setAiLoading] = useState<string | null>(
     null
   );
@@ -432,6 +433,42 @@ export default function ItineraryBuilderPage() {
       ...current,
       [section]: !current[section],
     }));
+  }
+
+  async function uploadHeroImage(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    try {
+      setImageUploading(true);
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.file?.url) {
+        throw new Error(result.error || "Unable to upload image.");
+      }
+
+      update("heroImage", result.file.url);
+    } catch (error) {
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Unable to upload image."
+      );
+    } finally {
+      setImageUploading(false);
+      event.target.value = "";
+    }
   }
 
   function addHighlight() {
@@ -703,6 +740,39 @@ export default function ItineraryBuilderPage() {
                   }
                   placeholder="https://..."
                 />
+
+                <div className="md:col-span-2">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-[#E8820C]/40 bg-[#E8820C]/10 px-3 py-2.5 text-xs font-black text-[#E8820C] transition hover:bg-[#E8820C]/20">
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={uploadHeroImage}
+                        disabled={imageUploading}
+                        className="sr-only"
+                      />
+                      {imageUploading ? "Uploading..." : "Choose image"}
+                    </label>
+
+                    {itinerary.heroImage && (
+                      <button
+                        type="button"
+                        onClick={() => update("heroImage", "")}
+                        className="text-xs font-bold text-zinc-500 hover:text-red-400"
+                      >
+                        Remove image
+                      </button>
+                    )}
+                  </div>
+
+                  {itinerary.heroImage && (
+                    <img
+                      src={itinerary.heroImage}
+                      alt="Hero preview"
+                      className="mt-4 h-40 w-full rounded-lg border border-[#2A2A2A] object-cover sm:w-72"
+                    />
+                  )}
+                </div>
               </div>
 
               <div className="mt-5 grid gap-5 md:grid-cols-3">

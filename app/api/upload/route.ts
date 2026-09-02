@@ -87,6 +87,9 @@ export async function POST(request: NextRequest) {
           name: file.name,
           type: file.type,
           size: file.size,
+          url: file.type.startsWith("image/")
+            ? `data:${file.type};base64,${buffer.toString("base64")}`
+            : undefined,
         },
       },
       { status: 201 }
