@@ -3,51 +3,23 @@
 import { useRouter } from "next/navigation";
 import {
   ArrowRight,
-  CalendarDays,
-  ChevronRight,
+  ArrowUpRight,
   Compass,
-  Map,
-  Plus,
+  MapPin,
+  Mountain,
   Settings,
   Sparkles,
-  WandSparkles,
 } from "lucide-react";
 
-const features = [
-  {
-    icon: <Sparkles size={18} />,
-    title: "AI-assisted planning",
-    description:
-      "Use Gemini Flash to turn rough travel ideas into useful itinerary suggestions.",
-  },
-  {
-    icon: <CalendarDays size={18} />,
-    title: "Day-by-day builder",
-    description:
-      "Build every day with activities, descriptions, timings, locations and pricing.",
-  },
-  {
-    icon: <WandSparkles size={18} />,
-    title: "Improve as you build",
-    description:
-      "Regenerate descriptions, highlights and activities whenever something feels weak.",
-  },
-  {
-    icon: <Map size={18} />,
-    title: "Flexible pricing",
-    description:
-      "Increase or decrease individual costs and keep the complete trip price under control.",
-  },
-];
 
 export default function HomePage() {
   const router = useRouter();
 
-  function createItinerary() {
+  function createJourney() {
     router.push("/itineraries/new");
   }
 
-  function openItineraries() {
+  function openJourneys() {
     router.push("/itineraries");
   }
 
@@ -56,317 +28,316 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#090909] text-white">
-      {/* NAVBAR */}
-
-      <header className="border-b border-[#242424] bg-[#0D0D0D]">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-          {/* LOGO */}
-
+    <main
+      className="min-h-screen overflow-hidden bg-[#f4f0e8] text-[#1d211c]"
+      style={{ fontFamily: "'Outfit', sans-serif" }}
+    >
+      <header className="relative z-10 border-b border-[#1d211c]/10">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-12">
           <button
             type="button"
             onClick={() => router.push("/")}
-            className="group flex items-center gap-3"
+            className="group flex items-center gap-3 text-left"
+            aria-label="Bettadajeeva home"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#E8820C] text-black transition group-hover:rotate-3">
-              <Compass size={19} strokeWidth={2.5} />
-            </div>
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1d211c] text-[#f4f0e8] transition-transform duration-300 group-hover:-rotate-12">
+              <Mountain size={19} strokeWidth={1.8} />
+            </span>
 
-            <div className="text-left">
-              <p className="text-sm font-black tracking-tight">
-                ItineraXZ
-              </p>
+            <span>
+              <span className="block text-[15px] font-semibold tracking-[-0.04em]">
+                Bettadajeeva
+              </span>
 
-              <p className="text-[8px] font-bold uppercase tracking-[0.25em] text-zinc-700">
-                Itinerary Builder
-              </p>
-            </div>
+              <span className="block text-[8px] font-medium uppercase tracking-[0.28em] text-[#1d211c]/50">
+                Travel, thoughtfully
+              </span>
+            </span>
           </button>
 
-          {/* NAV */}
-
-          <nav className="flex items-center gap-2">
+          <nav className="hidden items-center gap-8 text-[11px] font-medium uppercase tracking-[0.16em] text-[#1d211c]/60 md:flex">
             <button
               type="button"
-              onClick={openItineraries}
-              className="hidden rounded-lg px-4 py-2.5 text-xs font-bold text-zinc-500 transition hover:bg-[#181818] hover:text-white sm:block"
+              onClick={openJourneys}
+              className="transition-colors hover:text-[#b85d35]"
             >
-              Itineraries
+              Journeys
             </button>
 
+            <a
+              href="#philosophy"
+              className="transition-colors hover:text-[#b85d35]"
+            >
+              Our approach
+            </a>
+
+            <a
+              href="#escapes"
+              className="transition-colors hover:text-[#b85d35]"
+            >
+              Escapes
+            </a>
+          </nav>
+
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={openSettings}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-[#181818] hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#1d211c]/10 text-[#1d211c]/60 transition hover:border-[#1d211c]/30 hover:text-[#1d211c]"
               aria-label="Settings"
             >
-              <Settings size={17} />
+              <Settings size={16} strokeWidth={1.8} />
             </button>
 
             <button
               type="button"
-              onClick={createItinerary}
-              className="flex items-center gap-2 rounded-lg bg-[#E8820C] px-4 py-2.5 text-xs font-black text-black transition hover:bg-[#F29420]"
+              onClick={createJourney}
+              className="group flex items-center gap-2 rounded-full bg-[#b85d35] px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-[#974729]"
             >
-              <Plus size={15} />
-              <span className="hidden sm:inline">
-                New itinerary
-              </span>
-              <span className="sm:hidden">
-                New
-              </span>
+              Plan a journey
+
+              <ArrowUpRight
+                size={14}
+                className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
             </button>
-          </nav>
+          </div>
         </div>
       </header>
 
-      {/* HERO */}
+      <section className="relative mx-auto max-w-7xl px-5 pb-20 pt-16 sm:px-8 md:pb-28 md:pt-24 lg:px-12">
+        <div className="pointer-events-none absolute -right-28 -top-24 h-[32rem] w-[32rem] rounded-full border border-[#b85d35]/15" />
 
-      <section className="relative overflow-hidden border-b border-[#242424]">
-        {/* Background grid */}
+        <div className="pointer-events-none absolute -right-12 top-0 h-[22rem] w-[22rem] rounded-full border border-[#b85d35]/10" />
 
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.035]"
-          style={{
-            backgroundImage:
-              "linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)",
-            backgroundSize: "48px 48px",
-          }}
-        />
-
-        <div className="relative mx-auto max-w-6xl px-5 py-20 md:py-28">
-          <div className="max-w-4xl">
-            {/* LABEL */}
-
-            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-[#E8820C]/25 bg-[#E8820C]/5 px-3 py-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#E8820C]" />
-
-              <span className="text-[9px] font-black uppercase tracking-[0.25em] text-[#E8820C]">
-                AI itinerary builder
-              </span>
+        <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
+          <div className="relative z-[1]">
+            <div className="mb-8 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-[#b85d35]">
+              <span className="h-px w-9 bg-[#b85d35]" />
+              A Bettadajeeva original
             </div>
 
-            {/* TITLE */}
-
-            <h1 className="max-w-4xl text-5xl font-black leading-[0.95] tracking-[-0.04em] md:text-7xl lg:text-8xl">
-              Build trips
-              <br />
-              <span className="text-[#E8820C]">
-                that make sense.
+            <h1 className="max-w-3xl text-[3.7rem] font-medium leading-[0.93] tracking-[-0.075em] sm:text-7xl lg:text-[6.7rem]">
+              Go where the day
+              <span className="block font-light italic text-[#b85d35]">
+                feels longer.
               </span>
             </h1>
 
-            {/* DESCRIPTION */}
-
-            <p className="mt-8 max-w-2xl text-sm leading-7 text-zinc-500 md:text-base md:leading-8">
-              Create complete travel itineraries from a
-              simple idea. Let AI help with descriptions,
-              activities and highlights while you control
-              the route, schedule and pricing.
+            <p className="mt-8 max-w-lg text-[15px] leading-7 text-[#1d211c]/65">
+              Beautifully paced journeys for people who want to notice more:
+              the warm cup, the unmarked road, the view that was worth taking
+              the long way for.
             </p>
 
-            {/* ACTIONS */}
-
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-9 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
               <button
                 type="button"
-                onClick={createItinerary}
-                className="group flex items-center justify-center gap-3 rounded-lg bg-[#E8820C] px-6 py-4 text-xs font-black uppercase tracking-[0.15em] text-black transition hover:bg-[#F29420]"
+                onClick={createJourney}
+                className="group flex items-center gap-4 rounded-full bg-[#1d211c] px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#f4f0e8] transition hover:bg-[#b85d35]"
               >
-                Start building
-                <ArrowRight
-                  size={16}
-                  className="transition-transform group-hover:translate-x-1"
-                />
+                Begin your journey
+
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#f4f0e8]/15">
+                  <ArrowRight
+                    size={14}
+                    className="transition-transform group-hover:translate-x-1"
+                  />
+                </span>
               </button>
 
               <button
                 type="button"
-                onClick={openItineraries}
-                className="flex items-center justify-center gap-2 rounded-lg border border-[#292929] px-6 py-4 text-xs font-black uppercase tracking-[0.15em] text-zinc-400 transition hover:border-[#444] hover:text-white"
+                onClick={openJourneys}
+                className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1d211c]/60 underline decoration-[#b85d35]/50 underline-offset-8 transition hover:text-[#b85d35]"
               >
-                View itineraries
-                <ChevronRight size={15} />
+                See your journeys
               </button>
             </div>
-
-            {/* NO LOGIN */}
-
-            <p className="mt-5 text-[10px] font-bold uppercase tracking-wider text-zinc-700">
-              No account required · Start immediately
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* QUICK CREATE */}
-
-      <section className="border-b border-[#242424]">
-        <div className="mx-auto max-w-6xl px-5 py-12">
-          <div className="grid gap-3 md:grid-cols-3">
-            <QuickCard
-              number="01"
-              title="Describe your trip"
-              text="Destination, duration, travellers and the kind of experience you want."
-            />
-
-            <QuickCard
-              number="02"
-              title="Build with AI"
-              text="Use Gemini to generate and improve descriptions, days and highlights."
-            />
-
-            <QuickCard
-              number="03"
-              title="Tune the numbers"
-              text="Adjust activities and pricing until the itinerary actually works."
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* FEATURES */}
-
-      <section>
-        <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
-          <div className="mb-10 max-w-2xl">
-            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-[#E8820C]">
-              Everything in one place
-            </p>
-
-            <h2 className="mt-3 text-3xl font-black tracking-tight md:text-4xl">
-              More than a trip generator.
-            </h2>
-
-            <p className="mt-4 text-sm leading-7 text-zinc-600">
-              ItineraXZ is designed around the actual
-              itinerary-building workflow rather than
-              dumping an AI-generated wall of text on you.
-            </p>
           </div>
 
-          <div className="grid gap-px overflow-hidden rounded-xl border border-[#292929] bg-[#292929] md:grid-cols-2">
-            {features.map((feature) => (
-              <div
-                key={feature.title}
-                className="bg-[#111111] p-7 transition hover:bg-[#141414]"
-              >
-                <div className="mb-5 flex h-9 w-9 items-center justify-center rounded-lg border border-[#292929] bg-[#181818] text-[#E8820C]">
-                  {feature.icon}
+          <div className="relative mx-auto w-full max-w-[29rem] lg:mr-4">
+            <div className="absolute -left-7 top-14 h-28 w-28 rounded-full bg-[#d9a36f]/35 blur-2xl" />
+
+            <div className="relative min-h-[28rem] overflow-hidden rounded-[2rem] bg-[#26372f] p-7 text-[#f4f0e8] shadow-[0_24px_80px_rgba(29,33,28,0.14)] sm:min-h-[32rem] sm:p-9">
+              <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(244,240,232,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(244,240,232,0.12)_1px,transparent_1px)] [background-size:32px_32px]" />
+
+              <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full border border-[#d9a36f]/35" />
+
+              <div className="absolute -bottom-10 -right-10 h-48 w-48 rounded-full border border-[#d9a36f]/25" />
+
+              <div className="relative flex items-start justify-between">
+                <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-[#f4f0e8]/60">
+                  The next chapter
+                </span>
+
+                <Compass
+                  size={22}
+                  strokeWidth={1.2}
+                  className="text-[#d9a36f]"
+                />
+              </div>
+
+              <div className="relative mt-28">
+                <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-[#d9a36f]">
+                  Suggested escape
+                </p>
+
+                <h2 className="mt-3 max-w-xs text-4xl font-light leading-[0.98] tracking-[-0.06em] sm:text-5xl">
+                  The hills are calling softly.
+                </h2>
+              </div>
+
+              <div className="relative mt-12 flex items-end justify-between border-t border-[#f4f0e8]/15 pt-5">
+                <div>
+                  <div className="flex items-center gap-2 text-sm text-[#f4f0e8]/85">
+                    <MapPin size={14} className="text-[#d9a36f]" />
+                    Coorg, Karnataka
+                  </div>
+
+                  <p className="mt-2 text-[10px] uppercase tracking-[0.2em] text-[#f4f0e8]/45">
+                    Long weekend · monsoon air
+                  </p>
                 </div>
 
-                <h3 className="text-sm font-black">
-                  {feature.title}
-                </h3>
-
-                <p className="mt-3 max-w-md text-xs leading-6 text-zinc-600">
-                  {feature.description}
-                </p>
+                <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#f4f0e8]/20">
+                  <ArrowUpRight size={17} strokeWidth={1.5} />
+                </span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-
-      <section className="border-t border-[#242424]">
-        <div className="mx-auto max-w-6xl px-5 py-16">
-          <div className="relative overflow-hidden rounded-2xl border border-[#E8820C]/20 bg-[#111111] p-7 md:p-10">
-            <div className="relative z-10 max-w-2xl">
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-[#E8820C]">
-                Ready?
-              </p>
-
-              <h2 className="mt-3 text-3xl font-black tracking-tight md:text-4xl">
-                Turn the idea into an itinerary.
-              </h2>
-
-              <p className="mt-4 text-sm leading-6 text-zinc-600">
-                Start with rough notes. You can change
-                almost everything later.
-              </p>
-
-              <button
-                type="button"
-                onClick={createItinerary}
-                className="mt-7 flex items-center gap-3 rounded-lg bg-[#E8820C] px-5 py-3.5 text-xs font-black uppercase tracking-wider text-black transition hover:bg-[#F29420]"
-              >
-                Create itinerary
-                <ArrowRight size={15} />
-              </button>
             </div>
 
-            {/* Decorative element */}
-
-            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full border border-[#E8820C]/10" />
-
-            <div className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full border border-[#E8820C]/10" />
+            <p className="mt-4 pl-2 text-[10px] font-medium uppercase tracking-[0.2em] text-[#1d211c]/40">
+              Make room for the unexpected.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
+      <section
+        id="philosophy"
+        className="border-y border-[#1d211c]/10 bg-[#e9e3d8]"
+      >
+        <div className="mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-8 md:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24 lg:px-12">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#b85d35]">
+              The Bettadajeeva way
+            </p>
 
-      <footer className="border-t border-[#242424]">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-[10px] text-zinc-700 sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-black uppercase tracking-[0.2em]">
-            ItineraXZ
+            <h2 className="mt-5 max-w-sm text-4xl font-medium leading-[0.98] tracking-[-0.06em] md:text-5xl">
+              Travel is better when it leaves a little room.
+            </h2>
+          </div>
+
+          <div className="max-w-2xl">
+            <p className="text-xl font-light leading-8 tracking-[-0.025em] text-[#1d211c]/75 md:text-2xl md:leading-9">
+              Bettadajeeva turns a feeling into a considered route. No
+              crowded checklists. No racing from one landmark to the next.
+              Just enough structure to help you wander well.
+            </p>
+
+            <div className="mt-10 flex flex-wrap gap-x-8 gap-y-4 border-t border-[#1d211c]/15 pt-5 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#1d211c]/55">
+              <span className="flex items-center gap-2">
+                <Sparkles size={14} className="text-[#b85d35]" />
+                Thoughtful pacing
+              </span>
+
+              <span className="flex items-center gap-2">
+                <MapPin size={14} className="text-[#b85d35]" />
+                Places with character
+              </span>
+
+              <span className="flex items-center gap-2">
+                <Compass size={14} className="text-[#b85d35]" />
+                Space to explore
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="escapes"
+        className="mx-auto max-w-7xl px-5 py-16 sm:px-8 md:py-24 lg:px-12"
+      >
+        <div className="mb-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#b85d35]">
+              Places to begin
+            </p>
+
+            <h2 className="mt-4 text-4xl font-medium tracking-[-0.06em] md:text-5xl">
+              Find your kind of far.
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            onClick={openJourneys}
+            className="group flex items-center gap-2 self-start text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1d211c]/60 transition hover:text-[#b85d35] sm:self-auto"
+          >
+            View all journeys
+
+            <ArrowRight
+              size={14}
+              className="transition-transform group-hover:translate-x-1"
+            />
+          </button>
+        </div>
+
+        
+      </section>
+
+      <section className="px-5 pb-16 sm:px-8 md:pb-24 lg:px-12">
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[1.75rem] bg-[#b85d35] px-6 py-14 text-[#fff8ee] sm:px-12 md:py-20">
+          <div className="absolute -right-16 -top-24 h-80 w-80 rounded-full border border-white/20" />
+
+          <div className="absolute -right-2 -top-10 h-52 w-52 rounded-full border border-white/15" />
+
+          <div className="relative max-w-2xl">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/65">
+              Your next story starts here
+            </p>
+
+            <h2 className="mt-5 text-4xl font-medium leading-[0.98] tracking-[-0.06em] md:text-6xl">
+              Bring the feeling.
+              <span className="block font-light italic">
+                We&apos;ll find the way.
+              </span>
+            </h2>
+
+            <button
+              type="button"
+              onClick={createJourney}
+              className="group mt-9 flex items-center gap-3 rounded-full bg-[#fff8ee] px-5 py-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1d211c] transition hover:bg-[#1d211c] hover:text-[#fff8ee]"
+            >
+              Create a Bettadajeeva journey
+
+              <ArrowRight
+                size={15}
+                className="transition-transform group-hover:translate-x-1"
+              />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <footer className="border-t border-[#1d211c]/10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-7 text-[10px] font-medium uppercase tracking-[0.18em] text-[#1d211c]/45 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12">
+          <span className="font-semibold tracking-[0.08em] text-[#1d211c]">
+            Bettadajeeva
           </span>
 
-          <div className="flex items-center gap-5">
-            <button
-              type="button"
-              onClick={openItineraries}
-              className="transition hover:text-zinc-400"
-            >
-              Itineraries
-            </button>
+          <span>Thoughtful travel, one journey at a time.</span>
 
-            <button
-              type="button"
-              onClick={openSettings}
-              className="transition hover:text-zinc-400"
-            >
-              Settings
-            </button>
-
-            <span>
-              No account required
-            </span>
-          </div>
+          <button
+            type="button"
+            onClick={openSettings}
+            className="self-start transition hover:text-[#b85d35] sm:self-auto"
+          >
+            Settings
+          </button>
         </div>
       </footer>
     </main>
-  );
-}
-
-/* ================================================== */
-/* QUICK CARD                                         */
-/* ================================================== */
-
-function QuickCard({
-  number,
-  title,
-  text,
-}: {
-  number: string;
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="border border-[#292929] bg-[#111111] p-6">
-      <p className="text-[9px] font-black tracking-[0.25em] text-[#E8820C]">
-        {number}
-      </p>
-
-      <h3 className="mt-4 text-sm font-black">
-        {title}
-      </h3>
-
-      <p className="mt-2 text-xs leading-6 text-zinc-600">
-        {text}
-      </p>
-    </div>
   );
 }
