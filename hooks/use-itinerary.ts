@@ -1,36 +1,44 @@
+"use client";
+
+import { useCallback } from "react";
+
 import useAutosave from "@/hooks/use-autosave";
+import type { Itinerary } from "@/types/itinerary";
 
-const {
-  status,
-  isSaving,
-  isSaved,
-  hasError,
-  error,
-  saveNow,
-} = useAutosave({
-  value: itinerary,
+type UseItineraryOptions = {
+  delay?: number;
+  enabled?: boolean;
+};
 
-  delay: 1200,
+export default function useItinerary(
+  itinerary: Itinerary | null,
+  { delay = 1200, enabled = true }: UseItineraryOptions = {}
+) {
+  const onSave = useCallback(async (latestItinerary: Itinerary | null) => {
+    if (!latestItinerary?.id) {
+      return;
+    }
 
-  onSave: async (latestItinerary) => {
     const response = await fetch(
       `/api/itineraries/${latestItinerary.id}`,
       {
         method: "PUT",
         headers: {
-          "Content-Type":
-            "application/json",
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(
-          latestItinerary
-        ),
+        body: JSON.stringify(latestItinerary),
       }
     );
 
     if (!response.ok) {
-      throw new Error(
-        "Failed to save itinerary."
-      );
+      throw new Error("Failed to save itinerary.");
     }
-  },
-});
+  }, []);
+
+  return useAutosave({
+    value: itinerary,
+    delay,
+    enabled: enabled && itinerary !== null,
+    onSave,
+  });
+}

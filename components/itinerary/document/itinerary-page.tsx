@@ -15,7 +15,7 @@ import {
 
 import ItineraryDocument, {
   type ItineraryDocumentData,
-} from "./document/itinerary-document";
+} from "./itinerary-document";
 
 export type ItineraryPageData =
   ItineraryDocumentData & {
