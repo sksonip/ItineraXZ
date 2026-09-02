@@ -1,11 +1,35 @@
 import { create } from "zustand";
 import type {
   Itinerary,
-  ItineraryDay,
   ItineraryPhase,
   ItineraryPricing,
-} from "@/lib/itinerary/default";
-import { createDefaultItinerary } from "@/lib/itinerary/default";
+} from "@/types/itinerary";
+import type { ItineraryDay } from "@/types/day";
+
+function createDefaultItinerary(): Itinerary {
+  return {
+    title: "",
+    destination: "",
+    overview: "",
+    duration: 1,
+    travelers: 1,
+    travelStyle: "Balanced",
+    highlights: [],
+    inclusions: [],
+    exclusions: [],
+    advantages: [],
+    philosophy: "",
+    safety: "",
+    accommodations: [],
+    phases: [],
+    days: [],
+    pricing: {
+      currency: "INR",
+      items: [],
+      adjustments: [],
+    },
+  };
+}
 
 type ItineraryStore = {
   itinerary: Itinerary;
