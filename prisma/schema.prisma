@@ -1,0 +1,141 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Itinerary {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  title          String
+  destination    String
+  overview      String   @default("")
+  duration       Int
+  travelers      Int      @default(1)
+  travelStyle    String   @default("Balanced")
+  heroImage      String?
+  highlights     Json     @default("[]")
+  inclusions     Json     @default("[]")
+  exclusions     Json     @default("[]")
+  advantages     Json     @default("[]")
+  philosophy     String   @default("")
+  safety         String   @default("")
+  accommodations Json     @default("[]")
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  days           ItineraryDay[]
+  phases         ItineraryPhase[]
+  pricingItems   PricingItem[]
+  adjustments    PricingAdjustment[]
+
+  @@index([destination])
+  @@index([updatedAt])
+}
+
+model ItineraryDay {
+  id              String   @id @default(cuid())
+  itineraryId     String
+  day             Int
+  title           String
+  location        String   @default("")
+  description     String   @default("")
+  meals           Json     @default("{}")
+  accommodation   Json     @default("{}")
+  notes           Json     @default("[]")
+
+  itinerary       Itinerary @relation(
+    fields: [itineraryId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  activities      DayActivity[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([itineraryId, day])
+  @@index([itineraryId])
+}
+
+model DayActivity {
+  id          String   @id @default(cuid())
+  dayId       String
+  time        String   @default("")
+  title       String
+  description String   @default("")
+  duration    String   @default("")
+
+  day         ItineraryDay @relation(
+    fields: [dayId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  @@index([dayId])
+}
+
+model ItineraryPhase {
+  id          String   @id @default(cuid())
+  itineraryId String
+  title       String
+  description String   @default("")
+  days        Json     @default("[]")
+
+  itinerary   Itinerary @relation(
+    fields: [itineraryId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  @@index([itineraryId])
+}
+
+model PricingItem {
+  id          String   @id @default(cuid())
+  itineraryId String
+  name        String
+  category    String   @default("")
+  quantity    Float    @default(0)
+  unitPrice   Float    @default(0)
+
+  itinerary   Itinerary @relation(
+    fields: [itineraryId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  @@index([itineraryId])
+}
+
+model PricingAdjustment {
+  id          String   @id @default(cuid())
+  itineraryId String
+  name        String
+  type        AdjustmentType
+  value       Float
+  operation   AdjustmentOperation
+
+  itinerary   Itinerary @relation(
+    fields: [itineraryId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  @@index([itineraryId])
+}
+
+enum AdjustmentType {
+  percentage
+  fixed
+}
+
+enum AdjustmentOperation {
+  add
+  subtract
+}
