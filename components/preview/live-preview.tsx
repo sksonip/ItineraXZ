@@ -12,62 +12,59 @@ import {
 } from "react";
 
 type LivePreviewProps = {
+  /**
+   * Render exactly one document page here.
+   * The preview uses an A4 portrait canvas and clips anything
+   * that extends beyond that page.
+   */
   children: ReactNode;
 
-  /**
-   * Changes whenever the builder data changes.
-   * Used to show the preview as updated.
-   */
+  /** Changes whenever the builder data changes. */
   version?: number | string;
 
   title?: string;
-
   className?: string;
 
-  /**
-   * Optional callback when the preview is refreshed.
-   */
+  /** Optional callback when the preview is manually refreshed. */
   onRefresh?: () => void;
 };
 
 export default function LivePreview({
   children,
   version,
-  title = "Live Preview",
+  title = "PDF Preview",
   className = "",
   onRefresh,
 }: LivePreviewProps) {
-  const [fullscreen, setFullscreen] =
-    useState(false);
-
-  const [refreshing, setRefreshing] =
-    useState(false);
-
-  const [updated, setUpdated] =
-    useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [updated, setUpdated] = useState(false);
 
   useEffect(() => {
-    if (
-      version === undefined ||
-      version === null
-    ) {
-      return;
-    }
+    if (version === undefined || version === null) return;
 
     setUpdated(true);
-
     const timer = window.setTimeout(() => {
       setUpdated(false);
     }, 700);
 
-    return () => {
-      window.clearTimeout(timer);
-    };
+    return () => window.clearTimeout(timer);
   }, [version]);
+
+  useEffect(() => {
+    if (!fullscreen) return;
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setFullscreen(false);
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () =>
+      window.removeEventListener("keydown", closeOnEscape);
+  }, [fullscreen]);
 
   const handleRefresh = () => {
     setRefreshing(true);
-
     onRefresh?.();
 
     window.setTimeout(() => {
@@ -75,22 +72,27 @@ export default function LivePreview({
     }, 400);
   };
 
+  const previewSurface = (
+    <div className="min-h-0 flex-1 overflow-auto bg-[#d7d7d7] p-3 md:p-6">
+      <div className="flex min-h-full items-start justify-center">
+        {/* One A4 page only: 595.56 × 841.68 points. */}
+        <article className="relative aspect-[595.56/841.68] w-full max-w-[595.56px] shrink-0 overflow-hidden bg-white shadow-[0_12px_40px_rgba(0,0,0,0.24)]">
+          <div className="absolute inset-0">{children}</div>
+        </article>
+      </div>
+    </div>
+  );
+
   return (
     <section
-      className={`flex min-h-0 flex-col overflow-hidden rounded-xl border border-[#292929] bg-[#101010] ${className}`}
+      className={`flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-[#292929] bg-[#101010] ${className}`}
     >
-      {/* ====================================== */}
-      {/* HEADER                                 */}
-      {/* ====================================== */}
-
-      <div className="flex h-12 shrink-0 items-center justify-between border-b border-[#292929] bg-[#151515] px-3">
-        {/* TITLE */}
-
+      <header className="flex h-12 shrink-0 items-center justify-between border-b border-[#292929] bg-[#151515] px-3">
         <div className="flex min-w-0 items-center gap-2">
           <span
             className={`h-1.5 w-1.5 rounded-full transition ${
               updated
-                ? "bg-[#E8820C] shadow-[0_0_8px_rgba(232,130,12,0.7)]"
+                ? "bg-[#e8820c] shadow-[0_0_8px_rgba(232,130,12,0.7)]"
                 : "bg-emerald-500"
             }`}
           />
@@ -99,16 +101,11 @@ export default function LivePreview({
             <p className="truncate text-[9px] font-black uppercase tracking-[0.18em] text-zinc-400">
               {title}
             </p>
-
             <p className="hidden text-[7px] font-bold text-zinc-700 sm:block">
-              {updated
-                ? "Updating preview..."
-                : "Preview is up to date"}
+              {updated ? "Updating preview..." : "One-page A4 preview"}
             </p>
           </div>
         </div>
-
-        {/* ACTIONS */}
 
         <div className="flex items-center gap-1">
           <button
@@ -116,30 +113,22 @@ export default function LivePreview({
             onClick={handleRefresh}
             disabled={refreshing}
             className="flex h-8 w-8 items-center justify-center rounded-lg text-zinc-600 transition hover:bg-[#202020] hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
-            aria-label="Refresh preview"
+            aria-label="Refresh PDF preview"
           >
             <RefreshCw
               size={13}
-              className={
-                refreshing
-                  ? "animate-spin"
-                  : ""
-              }
+              className={refreshing ? "animate-spin" : ""}
             />
           </button>
 
           <button
             type="button"
-            onClick={() =>
-              setFullscreen(
-                (value) => !value
-              )
-            }
+            onClick={() => setFullscreen((value) => !value)}
             className="flex h-8 w-8 items-center justify-center rounded-lg text-zinc-600 transition hover:bg-[#202020] hover:text-white"
             aria-label={
               fullscreen
-                ? "Exit fullscreen"
-                : "Fullscreen preview"
+                ? "Exit fullscreen preview"
+                : "Open fullscreen preview"
             }
           >
             {fullscreen ? (
@@ -149,24 +138,13 @@ export default function LivePreview({
             )}
           </button>
         </div>
-      </div>
+      </header>
 
-      {/* ====================================== */}
-      {/* PREVIEW                                */}
-      {/* ====================================== */}
-
-      <div
-        className={
-          fullscreen
-            ? "fixed inset-0 z-[100] flex min-h-screen flex-col bg-[#090909]"
-            : "relative min-h-0 flex-1"
-        }
-      >
-        {fullscreen && (
+      {fullscreen ? (
+        <div className="fixed inset-0 z-[100] flex min-h-screen flex-col bg-[#090909]">
           <div className="flex h-12 shrink-0 items-center justify-between border-b border-[#292929] bg-[#151515] px-4">
             <div className="flex items-center gap-2">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-
               <span className="text-[9px] font-black uppercase tracking-[0.18em] text-zinc-400">
                 {title}
               </span>
@@ -174,35 +152,21 @@ export default function LivePreview({
 
             <button
               type="button"
-              onClick={() =>
-                setFullscreen(false)
-              }
+              onClick={() => setFullscreen(false)}
               className="flex h-8 items-center gap-2 rounded-lg border border-[#292929] px-3 text-[8px] font-black uppercase tracking-wider text-zinc-500 transition hover:border-[#444] hover:text-white"
             >
               <Minimize2 size={12} />
               Exit Preview
             </button>
           </div>
-        )}
 
-        <div
-          className={
-            fullscreen
-              ? "min-h-0 flex-1 overflow-auto bg-[#D7D7D7] p-4 md:p-8"
-              : "h-full min-h-[500px] overflow-auto bg-[#D7D7D7] p-3 md:p-6"
-          }
-        >
-          <div
-            className={
-              fullscreen
-                ? "mx-auto flex w-full justify-center"
-                : "flex min-w-max justify-center"
-            }
-          >
-            {children}
-          </div>
+          {previewSurface}
         </div>
-      </div>
+      ) : (
+        <div className="relative flex min-h-0 flex-1">
+          {previewSurface}
+        </div>
+      )}
     </section>
   );
 }

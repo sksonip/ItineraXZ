@@ -5,13 +5,6 @@ import {
   type StoredItinerary,
 } from "@/lib/db/memory-store";
 
-/*
- * Temporary in-memory storage.
- *
- * Replace these functions with your database layer
- * when Supabase/Prisma is connected.
- */
-
 const itineraryUpdateSchema = z.object({
   title: z.string().min(1).optional(),
   destination: z.string().min(1).optional(),
@@ -50,11 +43,6 @@ type RouteContext = {
   }>;
 };
 
-/**
- * GET /api/itineraries/:id
- *
- * Fetch one itinerary.
- */
 export async function GET(
   _request: NextRequest,
   { params }: RouteContext
