@@ -1,4 +1,4 @@
-# Bettada Jeeva — Itinerary Builder
+# Bettada Jeeva - Itinerary Builder
 
 **What this is:** an internal tool for Bettada Jeeva that lets Vignesh (non-technical) fill in a trip's **Overview, Description, Day-wise Plan, and Price Breakdown** through a simple form, and get back a polished, on-brand itinerary document — automatically laid out to match the studio-designed reference template, with no manual PowerPoint/Canva work per trip.
 
