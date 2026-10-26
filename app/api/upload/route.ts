@@ -11,6 +11,19 @@ const ALLOWED_TYPES = [
   "application/pdf",
 ];
 
+const MAGIC_BYTES: Record<string, number[][]> = {
+  "image/jpeg": [[0xff, 0xd8, 0xff]],
+  "image/png": [[0x89, 0x50, 0x4e, 0x47]],
+  "image/webp": [[0x52, 0x49, 0x46, 0x46]],
+  "application/pdf": [[0x25, 0x50, 0x44, 0x46]],
+};
+
+function matchesDeclaredType(buffer: Buffer, type: string) {
+  return (MAGIC_BYTES[type] ?? []).some((sig) =>
+    sig.every((byte, i) => buffer[i] === byte)
+  );
+}
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -65,6 +78,15 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
 
     const buffer = Buffer.from(bytes);
+
+    if (!matchesDeclaredType(buffer, file.type)) {
+      return NextResponse.json(
+        {
+          error: "File contents do not match the declared file type.",
+        },
+        { status: 415 }
+      );
+    }
 
     /*
      * Prevent unused-buffer issues while this endpoint

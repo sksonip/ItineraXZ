@@ -117,6 +117,7 @@ export async function PUT(
       ...existing,
       ...validation.data,
       id,
+      createdAt: existing.createdAt,
       updatedAt: new Date().toISOString(),
     };
 
