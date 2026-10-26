@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
+import { EnhanceBar, EnhanceContext } from "@/components/builder/enhance";
 import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -632,6 +633,12 @@ export default function ItineraryBuilderPage() {
   }
 
   return (
+    <EnhanceContext.Provider
+      value={{
+        tripTitle: itinerary.tripName,
+        destination: itinerary.destination,
+      }}
+    >
     <main className="min-h-screen bg-[#090909] text-white">
       {/* HEADER */}
 
@@ -1639,6 +1646,7 @@ export default function ItineraryBuilderPage() {
         </div>
       </div>
     </main>
+    </EnhanceContext.Provider>
   );
 }
 
@@ -1767,22 +1775,29 @@ function TextArea({
   onChange,
   placeholder,
   rows = 5,
+  enhance = true,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   rows?: number;
+  enhance?: boolean;
 }) {
+  const fieldId = useId();
+
   return (
-    <label className="block">
+    <div className="block">
       {label && (
-        <span className="mb-2 block text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
+        <label
+          htmlFor={fieldId}
+          className="mb-2 block text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
           {label}
-        </span>
+        </label>
       )}
 
       <textarea
+        id={fieldId}
         value={value}
         onChange={(event) =>
           onChange(event.target.value)
@@ -1791,7 +1806,15 @@ function TextArea({
         rows={rows}
         className="w-full resize-y rounded-lg border border-[#2A2A2A] bg-[#181818] px-3 py-3 text-sm leading-6 text-white outline-none placeholder:text-zinc-700 focus:border-[#E8820C]"
       />
-    </label>
+
+      {enhance && (
+        <EnhanceBar
+          label={label}
+          value={value}
+          onAccept={onChange}
+        />
+      )}
+    </div>
   );
 }
 
