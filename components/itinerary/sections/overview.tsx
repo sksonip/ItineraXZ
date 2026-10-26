@@ -293,12 +293,12 @@ export default function Overview({
 
               <div>
                 <p className="text-[9px] font-black uppercase tracking-wider text-zinc-500">
-                  Gemini suggestion
+                  AI suggestion
                 </p>
 
                 <p className="mt-1 text-[10px] leading-5 text-zinc-700">
                   Write a rough description first.
-                  Gemini can turn it into polished,
+                  AI can turn it into polished,
                   traveler-facing copy.
                 </p>
               </div>

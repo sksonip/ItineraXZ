@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     "AI itinerary",
     "trip planner",
     "travel itinerary",
-    "Gemini AI",
+    "AI itinerary builder",
   ],
 
   applicationName: "ItineraXZ",

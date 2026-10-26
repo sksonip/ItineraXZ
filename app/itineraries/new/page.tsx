@@ -98,7 +98,7 @@ export default function NewItineraryPage() {
   async function getAISuggestion() {
     if (!form.destination.trim()) {
       setError(
-        "Enter a destination first so Gemini has something useful to work with."
+        "Enter a destination first so the AI has something useful to work with."
       );
       return;
     }
@@ -435,7 +435,7 @@ export default function NewItineraryPage() {
                 </h2>
 
                 <p className="mt-1 text-xs text-zinc-600">
-                  This helps Gemini make better suggestions.
+                  This helps the AI make better suggestions.
                 </p>
               </div>
 
@@ -508,7 +508,7 @@ export default function NewItineraryPage() {
                   </h2>
 
                   <p className="mt-1 text-xs text-zinc-600">
-                    Tell Gemini what you want. Rough notes
+                    Tell the AI what you want. Rough notes
                     are completely fine.
                   </p>
                 </div>
@@ -529,7 +529,7 @@ export default function NewItineraryPage() {
                   )}
 
                   {aiLoading
-                    ? "Gemini thinking..."
+                    ? "AI thinking..."
                     : "AI suggest"}
                 </button>
               </div>
@@ -595,7 +595,7 @@ export default function NewItineraryPage() {
 
                 <div>
                   <h3 className="text-sm font-black">
-                    Gemini co-builder
+                    AI co-builder
                   </h3>
 
                   <p className="text-[10px] text-zinc-600">

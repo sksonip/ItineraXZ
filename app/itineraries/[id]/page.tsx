@@ -979,7 +979,7 @@ export default function ItineraryBuilderPage() {
                 {itinerary.highlights.length ===
                   0 && (
                   <EmptyState>
-                    Add highlights or let Gemini
+                    Add highlights or let AI
                     suggest them.
                   </EmptyState>
                 )}
@@ -1579,7 +1579,7 @@ export default function ItineraryBuilderPage() {
                     </h3>
 
                     <p className="mt-1 text-xs leading-5 text-zinc-500">
-                      Gemini can suggest descriptions,
+                      AI can suggest descriptions,
                       days, highlights and pricing.
                     </p>
                   </div>

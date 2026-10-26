@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenAI } from "@google/genai";
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
+import { generateJson, isAiConfigured } from "@/lib/ai/openrouter";
 
 const responseSchema = {
   type: "object",
@@ -39,9 +35,9 @@ const responseSchema = {
 
 export async function POST(request: NextRequest) {
   try {
-    if (!process.env.GEMINI_API_KEY) {
+    if (!isAiConfigured()) {
       return NextResponse.json(
-        { error: "GEMINI_API_KEY is not configured." },
+        { error: "AI is not configured." },
         { status: 500 }
       );
     }
@@ -117,27 +113,17 @@ Each suggestion must contain:
 - text
 `;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.7-flash",
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema,
-        temperature: 0.7,
-      },
+    const result = await generateJson<any>({
+      prompt,
+      schema: responseSchema,
+      temperature: 0.7,
     });
-
-    if (!response.text) {
-      throw new Error("Gemini returned an empty response.");
-    }
-
-    const result = JSON.parse(response.text);
 
     if (
       !result.suggestions ||
       !Array.isArray(result.suggestions)
     ) {
-      throw new Error("Invalid Gemini response.");
+      throw new Error("Invalid AI response.");
     }
 
     return NextResponse.json(result);

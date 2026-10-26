@@ -250,14 +250,14 @@ export default function SettingsPage() {
             <SectionHeader
               number="01"
               title="AI assistant"
-              description="Control Gemini-powered itinerary suggestions."
+              description="Control AI-powered itinerary suggestions."
               icon={<Sparkles size={17} />}
             />
 
             <div className="border-t border-[#242424]">
               <SettingToggle
                 title="AI suggestions"
-                description="Allow Gemini to suggest descriptions, activities, highlights and itinerary improvements."
+                description="Allow AI to suggest descriptions, activities, highlights and itinerary improvements."
                 checked={settings.aiSuggestions}
                 onChange={(value) =>
                   updateSetting(
@@ -269,7 +269,7 @@ export default function SettingsPage() {
 
               <SettingInfo
                 title="AI provider"
-                value="Gemini Flash"
+                value="OpenRouter"
               />
             </div>
           </section>

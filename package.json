@@ -26,8 +26,6 @@
   },
   "homepage": "https://github.com/Nithyacoorg2005/ItineraXZ#readme",
   "dependencies": {
-    "@google/genai": "^2.20.0",
-    "@google/generative-ai": "^0.24.1",
     "@prisma/client": "^6.19.0",
     "@tailwindcss/postcss": "^4.3.3",
     "clsx": "^2.1.1",

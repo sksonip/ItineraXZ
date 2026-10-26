@@ -208,11 +208,11 @@ export default function Philosophy({
 
               <div>
                 <p className="text-[9px] font-black uppercase tracking-wider text-zinc-500">
-                  Gemini suggestion
+                  AI suggestion
                 </p>
 
                 <p className="mt-1 text-[10px] leading-5 text-zinc-700">
-                  Add rough ideas first. Gemini can
+                  Add rough ideas first. AI can
                   improve the wording without changing
                   the core travel concept.
                 </p>

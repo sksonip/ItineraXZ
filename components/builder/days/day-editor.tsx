@@ -543,7 +543,7 @@ function ActivityEditor({
         />
 
         <p className="mt-2 text-[9px] text-zinc-700">
-          Gemini can improve this description while
+          AI can improve this description while
           keeping the activity details intact.
         </p>
       </div>
