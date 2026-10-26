@@ -533,7 +533,7 @@ export default function TripDetails({
               </div>
 
               <p className={hintClass}>
-                This can later be used by Gemini to
+                This can later be used by AI to
                 generate more suitable day suggestions.
               </p>
             </div>

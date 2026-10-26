@@ -416,7 +416,7 @@ function EditAdvantage({
 
           <p className="mt-1.5 text-[9px] text-zinc-700">
             This can be improved automatically by
-            Gemini later.
+            AI later.
           </p>
         </div>
 
